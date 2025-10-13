@@ -219,7 +219,7 @@ const Page = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <Link
-                            href={`/admin/products/view/${product._id}`}
+                            href={`/admin/products/view/${product.slug}`}
                             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 group/tooltip relative"
                             title="View Product"
                           >
@@ -230,7 +230,7 @@ const Page = () => {
                           </Link>
                           
                           <Link
-                            href={`/admin/products/edit/${product._id}`}
+                            href={`/admin/products/edit/${product.slug}`}
                             className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200 group/tooltip relative"
                             title="Edit Product"
                           >

@@ -621,34 +621,34 @@ const fetchData = async () => {
                 {/* Title */}
                 <div className="">
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Product Title *
+                    Meta Title 
                   </label>
                   <div className="relative">
                     <input
                       type="text"
-                      name="title"
-                      value={formData.title}
+                      name="meta_title"
+                      value={formData.meta_title}
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
-                      placeholder="Enter product title"
+                      placeholder="Enter product meta title"
                     />
                     <FiTag className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   </div>
                 </div>
                  <div className="">
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Product Title *
+                    Meta description 
                   </label>
                   <div className="relative">
                     <input
                       type="text"
-                      name="title"
-                      value={formData.title}
+                      name="meta_description"
+                      value={formData.meta_description}
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
-                      placeholder="Enter product title"
+                      placeholder="Enter product meta description"
                     />
                     <FiTag className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   </div>
