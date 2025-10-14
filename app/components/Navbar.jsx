@@ -61,11 +61,11 @@ export default function Navbar() {
 >
 
           {/* Top Section */}
-          <div className="flex items-center justify-between py-4 px-4 md:px-12 xl:px-24 2xl:px-40">
+          <div className="flex items-center justify-between py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
             {/* Logo */}
-            <Link href="/" className="w-32 md:w-36">
+            <Link href="/" className="w-32 ">
               <Image
-                src="/Images/logo.webp"
+                src="/Images/frontend/logo.webp"
                 alt="Logo"
                 width={440}
                 height={440}
@@ -252,11 +252,11 @@ export default function Navbar() {
 >
 
           {/* Top Section */}
-          <div className="flex items-center justify-between py-4 px-4 md:px-12 xl:px-24 2xl:px-40">
+          <div className="flex items-center justify-between py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
             {/* Logo */}
-            <Link href="/" className="w-32 md:w-36">
+            <Link href="/" className="w-32 ">
               <Image
-                src="/Images/logo.webp"
+                src="/Images/frontend/logo.webp"
                 alt="Logo"
                 width={440}
                 height={440}
@@ -324,7 +324,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center px-6 py-4 h-[80px] border-b border-[#2D4B52]/20">
           <Link href="/" className="w-24" onClick={() => setIsOpen(false)}>
             <Image
-              src="/Images/logo.webp"
+              src="/Images/frontend/logo.webp"
               alt="Logo"
               width={220}
               height={220}

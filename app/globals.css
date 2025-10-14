@@ -1,26 +1,130 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* marquee */
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 500s linear infinite;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @keyframes marquee {
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(-90%); }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+.navbar-container {
+  border-top: 1px solid #6666664d;
+  border-bottom: 1px solid #6666664d;
+  background: #fff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  position: relative;
+}
+
+.nav-links a {
+  position: relative;
+  color: #666;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #F48C7F;
+}
+
+/* Hover border line effect */
+.nav-links a::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.nav-links a:hover::before {
+  opacity: 1;
+}
+
+
+/* Dropdown styling */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 240px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 6px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-arrow {
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 8px solid white;
+}
+
+.dropdown-section + .dropdown-section {
+  margin-top: 10px;
+}
+
+.dropdown-section h4 {
+  font-size: 16px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bgBanner{
+  background-color: #b6703244;
+  background-image: repeating-conic-gradient(
+    from 45deg,
+    rgba(250, 248, 234, 0.171) 0deg 15deg, /* lighter */
+    transparent 15deg 30deg
+  );
+  background-size: 80px 80px;
+
+}
+
+
+
+.head{
+  font-size: 18px;
+  font-weight: 500;
+}
+
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
