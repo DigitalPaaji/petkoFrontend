@@ -1,76 +1,110 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { useGlobalContext } from '../context/GlobalContext';
+"use client";
+import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import { HiOutlineShoppingBag } from "react-icons/hi";
+import { IoEyeOutline } from "react-icons/io5";
+import "swiper/css";
+import "swiper/css/navigation";
+import Link from "next/link";
+import { FaCartArrowDown, FaHeart } from "react-icons/fa";
+import Image from "next/image";
+import { Heart } from "lucide-react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-export default function EarringsMarquee({categoryId, categoryName}) {
-  const { subCategoriesMap, refetchProductsByCategory } = useGlobalContext();
-  const [filteredProducts, setFilteredProducts] = useState([]);
+
+function RelatedProducts() {
+  const [products, setProducts] = useState([]);
+
   const [loading, setLoading] = useState(true);
+  const staticProducts = [
+    {
+      _id: "1",
+      name: "Elegant Gold Rakhi",
+      category: { _id: "cat1", name: "Rakhi" },
+      subcategory: { _id: "sub1", name: "Premium Rakhi" },
+      price: 999,
+      finalPrice: 799,
+      discount: 20,
+      description: {
+        paragraphs: [
+          "This elegant gold Rakhi is crafted with precision and care, featuring intricate designs that symbolize the bond between siblings.",
+          "Made with high-quality materials to ensure durability and beauty.",
+        ],
+      },
+      images: [
+        "/Images/frontend/1.webp",
+        "/Images/frontend/1.webp",
+        "/Images/frontend/1.webp",
+      ],
+      tags: [{ name: "Premium" }, { name: "Festive" }, { name: "Traditional" }],
+    },
+    {
+      _id: "2",
+      name: "Silver Thread Rakhi",
+      category: { _id: "cat1", name: "Rakhi" },
+      subcategory: { _id: "sub2", name: "Traditional Rakhi" },
+      price: 599,
+      finalPrice: 499,
+      discount: 17,
+      description: {
+        paragraphs: [
+          "Traditional silver thread Rakhi with authentic design patterns passed down through generations.",
+          "Perfect for those who appreciate classic designs with modern durability.",
+        ],
+      },
+      images: [
+        "/Images/frontend/1.webp",
+        "/Images/frontend/1.webp",
+        "/Images/frontend/1.webp",
+      ],
+      tags: [{ name: "Traditional" }, { name: "Handmade" }],
+    },
+    {
+      _id: "3",
+      name: "Royal Pet Collar",
+      category: { _id: "cat2", name: "Pet Accessories" },
+      subcategory: { _id: "sub3", name: "Luxury Collars" },
+      price: 799,
+      finalPrice: 649,
+      discount: 18,
+      description: {
+        paragraphs: [
+          "A stylish royal collar designed for your pets with comfort and durability in mind.",
+          "Adjustable size and premium finish.",
+        ],
+      },
+      images: ["/Images/frontend/1.webp", "/Images/frontend/1.webp"],
+      tags: [{ name: "Pets" }, { name: "Luxury" }],
+    },
+  ];
 
 
-  const subCategories = subCategoriesMap[categoryId] || [];
-
-useEffect(() => {
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const result = await refetchProductsByCategory(categoryId);
-
-      if (Array.isArray(result)) {
-        const filtered = result.filter(
-          (p) =>
-            p.category === categoryId || p.category?._id === categoryId
-        );
-        setFilteredProducts(filtered);
-      } else {
-        setFilteredProducts([]);
-      }
-    } catch (err) {
-      console.error('Error fetching earrings:', err);
-    } finally {
+  useEffect(() => {
+          AOS.init({ duration: 800, once: true });
+    // simulate fetch
+    setTimeout(() => {
+      setProducts(staticProducts);
       setLoading(false);
-    }
-  };
+    }, 1000);
+  }, []);
 
-  fetchData();
-}, []);
-
-
-  const loop = [...filteredProducts,...filteredProducts];
+  const loop = [...products, ...products];
 
   return (
-    <section className="py-16 px-4 sm:px-8 lg:px-16">
-      <div className="flex items-center justify-between gap-4 xl:gap-0 flex-wrap xl:flex-nowrap mb-8">
-        <div className="max-w-xl">
-          <h2 className="text-xl md:text-2xl font-mosetta  font-semibold text-[#99571d]  capitalize">You will also love these!
-</h2>
+    <div className="mx-4 md:mx-12 xl:mx-24 2xl:mx-40 border my-12 border-[#6666664d]  p-6 lg:p-8">
+      <h4 className="border-b border-[#6666664d] py-4 px-6 transition-colors duration-200 font-semibold text-[17px] lg:text-[22px] ">
+        Related Products
+      </h4>
 
-        </div>
-        <ul className="flex gap-4  flex-wrap text-md font-medium">
-          {subCategories.map((sub) => (
-            <Link key={sub._id} href={`/category/${categoryName}/${categoryId}`}>
-            <li >
-              <div className="hover:bg-[#B67032] hover:text-white rounded-xl p-2 transition-all duration-300 text-[#B67032]">
-                {sub.name.toUpperCase()}
-              </div>
-            </li>
-            </Link>
-          ))}
-        </ul>
-      </div>
-
-      <div className="overflow-x-auto scrollbar-hide">
+      <div className="overflow-x-auto scrollbar-hide pt-8 ">
         {loading ? (
           <div className="flex gap-4 overflow-x-auto scrollbar-hide">
             {Array.from({ length: 6 }).map((_, idx) => (
               <div
                 key={idx}
-                className="w-[400px] bg-white rounded-xl overflow-hidden shadow-md animate-pulse flex-shrink-0"
+                className="w-[400px] bg-white overflow-hidden animate-pulse flex-shrink-0 p-4 border border-transparent hover:border-[#6666664d] "
               >
                 <div className="w-full h-[300px] bg-stone-200" />
                 <div className="p-4 space-y-2">
@@ -90,7 +124,6 @@ useEffect(() => {
               768: { slidesPerView: 3 },
               1024: { slidesPerView: 4 },
               1280: { slidesPerView: 5 },
-              1536: { slidesPerView: 6 },
             }}
             autoplay={{
               delay: 0,
@@ -100,48 +133,61 @@ useEffect(() => {
             loop={true}
             grabCursor={true}
           >
-            {loop.map((item, idx) => {
-            
-              return (
-                <SwiperSlide key={idx}>
-                  <Link
-                    href={`/product/${item.name}/${item._id}`}
-                    className="group flex-shrink-0 w-full bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow"
-                  >
-                    <div className="w-full h-[300px] relative">
-                      <img
-                        src={item.images?.[0]}
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      {item.subCategory || item.subcategory?.name && (<div className="absolute top-2 left-2 bg-[#B67032] text-white text-xs px-2 py-1 rounded">
-                        
-                      </div>)}
-                    </div>
-                    <div className="p-4 flex flex-col justify-between">
-                      <h4 className="font-semibold text-stone-800 group-hover:text-[#B67032] transition-colors text-md truncate">
-                        {item.name}
-                      </h4>
-                    {item.description?.paragraphs?.[0] && (
-  <p className="text-sm text-stone-600 mt-1 line-clamp-2">
-    {item.description.paragraphs[0].split(" ").slice(0, 10).join(" ")}...
-  </p>
-)}
+            {loop.map((item, idx) => (
+              <SwiperSlide key={idx}>
+                <div className="cursor-default group w-full p-4 bg-white overflow-hidden  transition-transform duration-300 border border-transparent hover:border-[#6666664d] ">
+                  <div className="relative w-full aspect-square overflow-hidden ">
+                    <img
+                      src={item.images?.[0]}
+                      alt={item.name}
+                      className="w-full h-full object-contain"
+                    />
+               <div
+        // data-aos="fade-up"
+        // data-aos-duration="300"
+        className="absolute bottom-0 left-0 right-0 py-2 w-full bg-white opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2"
+      >
+        <div className="w-9 h-9 p-2 hover:bg-[#F48C7F] rounded-full transition-colors duration-300">
+          <HiOutlineShoppingBag
+            className="w-full h-full text-gray-700 cursor-pointer"
+          />
+        </div>
 
+        <div className="w-9 h-9 p-2 hover:bg-[#F48C7F] rounded-full transition-colors duration-300">
+          <Heart className="w-full h-full text-gray-700 cursor-pointer" />
+        </div>
+
+        <div className="w-9 h-9 p-2 hover:bg-[#F48C7F] rounded-full transition-colors duration-300">
+          <IoEyeOutline className="w-full h-full text-gray-700 cursor-pointer" />
+        </div>
+      </div>
+                  </div>
+
+                  <div className="p-4 ">
+                    <h4 className="font-normal text-[#2ea2cc] group-hover:text-[#F48C7F] transition-colors text-md truncate">
+                      {item.name}
+                    </h4>
+
+                    <div className="">
+                      ₹{item.finalPrice}{" "}
+                      <span className="text-[#666] text-sm line-through">
+                        ₹{item.price}
+                      </span>
                     </div>
-                  </Link>
-                </SwiperSlide>
-              );
-            })}
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
           </Swiper>
         )}
       </div>
-
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
       `}</style>
-    </section>
+    </div>
   );
 }
+
+export default RelatedProducts;

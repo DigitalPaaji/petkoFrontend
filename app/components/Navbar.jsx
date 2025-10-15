@@ -102,7 +102,9 @@ export default function Navbar() {
                   0
                 </span>
               </Link>
+               <Link href="/wishlist">
               <Heart className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
+            </Link>
               <User className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
 
               {/* Hamburger */}

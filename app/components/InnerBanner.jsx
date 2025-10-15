@@ -5,13 +5,8 @@ import Link from 'next/link';
 export default function Banner({ title = '', image = '' }) {
   return (
     <div
-      className="bg-gray-100 relative w-full px-4 md:px-12 xl:px-24 2xl:px-40 py-6"
-      // style={{
-      //   backgroundImage: `url(${image})`,
-      //   backgroundSize: 'cover',
-      //   backgroundPosition: 'center',
-      //   backgroundRepeat: 'no-repeat',
-      // }}
+      className="bg-gray-100 relative w-full px-4 md:px-12 xl:px-24 2xl:px-40 py-6 "
+
     >
       {/* Text Content */}
       <div className="relative z-10 px-4">

@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import RelatedProducts from '../../components/RelatedProducts'
+import { Heart } from 'lucide-react';
 
 export default function ProductPage() {
   const [activeTab, setActiveTab] = useState('description');
@@ -49,6 +51,7 @@ export default function ProductPage() {
   };
 
   return (
+    <>
     <div className="min-h-screen  px-4 md:px-12 xl:px-24 2xl:px-40">
       {/* Product Section */}
       <section className="py-12">
@@ -100,9 +103,16 @@ export default function ProductPage() {
 
           {/* Product Details */}
           <div className="lg:w-1/2 lg:p-6">
-            <h1 className="text-2xl font-normal pb-4 border-b border-[#6666664d]">
+           <div className="flex items-center justify-between pb-4 border-b border-[#6666664d]">
+
+
+            <h1 className="text-2xl font-normal ">
               Premium Organic Dog Food
             </h1>
+                  <div className="w-8 h-8">
+          <Heart className="w-full h-full text-gray-700 cursor-pointer" />
+        </div>
+           </div>
 
             <div className="text-2xl font-semibold my-4">$29.99</div>
             <div className="font-semibold flex items-center gap-2">
@@ -258,5 +268,8 @@ export default function ProductPage() {
         </div>
       </section>
     </div>
+<RelatedProducts />
+    </>
+
   );
 }

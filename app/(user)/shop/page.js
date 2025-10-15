@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { Heart, ShoppingBag, Search } from "lucide-react";
 
 // adjust these to your actual locations
-import { Product } from "../../components/entities/Product";
+// import { Product } from "../../components/entities/Product";
 // import { useCart } from "../../components/context/GlobalContext";
 
 export default function Shop() {
