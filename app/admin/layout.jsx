@@ -146,6 +146,37 @@ transition={Flip}
 
           {/* Navigation Menu */}
           <nav className="flex-1 px-4 py-6 space-y-1">
+
+{  
+
+  <Link
+                  
+                  href={"/admin"}
+                  className={`flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                    pathname=="/admin"
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105'
+                      : 'text-gray-600 hover:bg-white hover:shadow-md hover:scale-105'
+                  }`}
+                  onClick={() => setIsMobileSidebarOpen(false)}
+                >
+                  <FiHome 
+                    size={20} 
+                    className={`${ pathname=="/admin" ? 'text-white' : "text-blue-500"} transition-colors`}
+                  />
+                  {(isSidebarOpen || isMobileSidebarOpen) && (
+                    <span className={`ml-4 font-medium transition-colors ${
+                       pathname=="/admin" ? 'text-white' : 'group-hover:text-gray-900'
+                    }`}>
+                     Dashboard
+                    </span>
+                  )}
+                  { pathname=="/admin" && (isSidebarOpen || isMobileSidebarOpen) && (
+                    <div className="ml-auto w-2 h-2 bg-white rounded-full"></div>
+                  )}
+                </Link>
+}
+
+
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname.includes(item.path);

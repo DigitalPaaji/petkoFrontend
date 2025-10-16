@@ -93,7 +93,6 @@ const Page = ({ params: { slug } }) => {
     }
   }, [slug]);
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -190,7 +189,6 @@ const Page = ({ params: { slug } }) => {
     setColorVariants((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -250,6 +248,7 @@ const Page = ({ params: { slug } }) => {
     }
   };
 
+
   const allImages = [
     ...(product?.images || []).filter((img) => !imagesToDelete.includes(img)),
     ...galleryImages.map((file) => URL.createObjectURL(file)),
@@ -282,6 +281,7 @@ const Page = ({ params: { slug } }) => {
   }
 
   return (
+
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 text-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -802,6 +802,7 @@ const Page = ({ params: { slug } }) => {
         </form>
       </div>
     </div>
+
   );
 };
 
