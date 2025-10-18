@@ -1,176 +1,193 @@
 "use client";
-// import { useGlobalContext } from "../../components/context/GlobalContext";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { React, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import InnerBanner from '../../components/InnerBanner'
-// import CheckoutSidebar from "./CheckoutSidebar";
+import { toast } from "react-toastify";
+import InnerBanner from "../../components/InnerBanner";
 import Link from "next/link";
 
 export default function CartSidebar() {
-//   const { isCartOpen, setIsCartOpen, cart, removeFromCart, updateQty } =
-//     useGlobalContext();
+  // Sample product data
+  const [cart, setCart] = useState([
+    {
+      _id: "1",
+      cartItemId: "item1",
+      name: "Premium Dog Food",
+      price: 1200,
+      quantity: 2,
+      stock: 5,
+      color: "Brown",
+      images: ["/Images/frontend/4.webp"],
+    },
+    {
+      _id: "2",
+      cartItemId: "item2",
+      name: "Cat Scratching Post",
+      price: 899,
+      quantity: 1,
+      stock: 3,
+      color: "Grey",
+      images: ["/Images/frontend/2.webp"],
+    },
+  ]);
+
   const [coupon, setCoupon] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
-  const [showCheckout, setShowCheckout] = useState(false);
+
   const handleApplyCoupon = async () => {
-    const code = coupon.trim();
+    const code = coupon.trim().toUpperCase();
     if (!code) return;
 
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_LOCAL_PORT}/coupon/${code}`
-      );
-      const data = await res.json();
-
-      if (res.ok && data.valid) {
-        setAppliedCoupon(code);
-        setDiscountPercent(data.discountPercent);
-      } else {
-        setAppliedCoupon("");
-        setDiscountPercent(0);
-        toast.error(data.message || "Invalid coupon code");
-      }
-    } catch (err) {
-      toast.error("Failed to validate coupon");
+    if (code === "PETLOVE10") {
+      setAppliedCoupon(code);
+      setDiscountPercent(10);
+      toast.success("Coupon applied successfully!");
+    } else {
+      setAppliedCoupon("");
+      setDiscountPercent(0);
+      toast.error("Invalid coupon code");
     }
   };
 
-//   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((item) => item._id !== id));
+  };
+
+  const updateQty = (id, newQty) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item._id === id ? { ...item, quantity: newQty } : item
+      )
+    );
+  };
+
+  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <>
-    <InnerBanner title={"Cart"} />
-      {/* {isCartOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-[998]"
-          onClick={() => setIsCartOpen(false)} // close on overlay click
-        />
-      )} */}
+      <InnerBanner title={"Cart"} />
 
-      <div 
-        // className={`fixed top-0 right-0 min-h-screen 
-        //  w-[90%] md:w-[40%] xl:w-[25%] bg-white shadow-lg z-[999] transition-transform duration-300 ${
-        //    isCartOpen ? "translate-x-0" : "translate-x-full"
-        //  }`}
-      >
-
-   {/* <h1 className=" text-center text-2xl md:text-4xl font-mosetta font-medium ">
-    Cart
-   </h1> */}
-        {/* {cart.length === 0 ? ( */}
-          <div className="relative z-[999] flex items-center justify-center h-full w-full text-center text-gray-500 px-6">
-            <div className="flex flex-col my-24 items-center justify-center">
-              <Image
-              width={440}
-               height={440}
-                src="/Images/frontend/cart.gif"
-                alt="Empty Cart"
-                className="w-40 h-40 mb-4 "
-              />
-              <p className="text-md">Your Cart Is Empty</p>
-               <Link href={'/'}
-                className="text-center text-md text-[#2ea2cc] underline mt-3 w-full font-semibold"
-              >
-                Explore Products
-              </Link>
-            </div>
+      <div className="relative z-[999] flex flex-col justify-between h-full px-4 md:px-12 xl:px-24 2xl:px-40 my-16">
+        {cart.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center text-gray-500">
+            <Image
+              width={300}
+              height={300}
+              src="/Images/frontend/cart.gif"
+              alt="Empty Cart"
+              className="w-40 h-40 mb-4"
+            />
+            <p className="text-md">Your Cart Is Empty</p>
+            <Link
+              href={"/"}
+              className="text-md text-[#2ea2cc] underline mt-3 font-semibold"
+            >
+              Explore Products
+            </Link>
           </div>
-        {/* ) : ( */}
-          {/* <div className="relative z-[999] flex flex-col justify-between h-full">
-            <div className="p-4 space-y-4 overflow-y-auto flex-1">
+        ) : (
+          <div className="flex items-center justify-center gap-12 flex-wrap lg:flex-nowrap mx-4 md:mx-12 xl:mx-24 2xl:mx-40">
+            {/* Cart Items */}
+            <div className="space-y-6 overflow-y-auto flex flex-col ">
               {cart.map((item) => (
-                <div key={item.cartItemId} className="flex items-start gap-4 text-md">
-                  <Link href={`/product/${item.name}/${item._id}`} 
-                   onClick={() => setIsCartOpen(false)}
-                  >
-                    <Image
-                      src={item.images[0]}
-                      alt={item.name}
-                      width={400}
-                      height={400}
-                      className="w-24 h-24 rounded-md object-cover"
-                    />
-                  </Link>
-                  <div className="flex-1 space-y-2">
-                    <p className="">{item.name}</p>
-                    <p className="">₹{item.price}</p>
-                   <p className=" border w-fit border-gray-200 rounded-full px-2  text-gray-600 text-sm font-semibold">{item.color}</p>
+                <div
+                  key={item.cartItemId}
+                  className="bg-white  shadow-md border border-gray-100 hover:shadow-lg transition p-5"
+                >
+                  <div className="flex flex-wrap md:grid md:grid-cols-5 lg:grid-cols-12 place-items-center gap-4">
+                    {/* Product Image */}
+                    <div className="lg:col-span-1 w-20 h-20 rounded-lg overflow-hidden bg-gray-50">
+                      <Link href={`/product/${item.name}/${item._id}`}>
+                        <Image
+                          src={item.images[0] || "/Images/img.webp"}
+                          alt={item.name}
+                          width={400}
+                          height={400}
+                          className="w-full h-full object-cover"
+                        />
+                      </Link>
+                    </div>
 
-                    <div className="flex items-center gap-2 ">
-                      <button
-                        className="cursor-pointer px-2 text-md bg-gray-100"
-                        onClick={() =>
-                          updateQty(
-                            item._id,
-                            Math.max(1, item.quantity - 1),
-                            item.color || item.selectedColor?.colorName
-                          )
-                        }
-                        disabled={item.quantity <= 1}
-                      >
-                        -
-                      </button>
+                    {/* Product Details */}
+                    <div className="lg:col-span-5 flex flex-col w-full pl-4">
+                      <p className="text-lg font-medium text-gray-700 font-serif">
+                        {item.name}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Color:{" "}
+                        <span className="font-medium text-gray-700">
+                          {item.color}
+                        </span>
+                      </p>
+                    </div>
 
-                      <span>{item.quantity}</span>
-
-                      <button
-                        disabled={item.quantity >= (item.stock ?? 1)}
-                        className={`cursor-pointer px-2 bg-gray-100 ${
-                          item.quantity >= (item.stock ?? 1)
-                            ? "opacity-40 cursor-not-allowed"
-                            : "hover:bg-gray-200"
-                        }`}
-                        onClick={() => {
-                          if (item.quantity < (item.stock ?? 1)) {
-                            updateQty(
-                              item._id,
-                              item.quantity + 1,
-                              item.color || item.selectedColor?.colorName
-                            );
+                    {/* Quantity & Price */}
+                    <div className="lg:col-span-3 flex flex-col sm:flex-row md:flex-col gap-2 items-center justify-center">
+                      <div className="flex items-center gap-2 border border-gray-200 rounded-md px-2 py-1">
+                        <button
+                          className="px-2 text-md bg-gray-100 rounded"
+                          onClick={() =>
+                            updateQty(item._id, Math.max(1, item.quantity - 1))
                           }
-                        }}
-                      >
-                        +
-                      </button>
+                          disabled={item.quantity <= 1}
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          disabled={item.quantity >= (item.stock ?? 1)}
+                          className={`px-2 bg-gray-100 rounded ${
+                            item.quantity >= (item.stock ?? 1)
+                              ? "opacity-40 cursor-not-allowed"
+                              : "hover:bg-gray-200"
+                          }`}
+                          onClick={() =>
+                            item.quantity < (item.stock ?? 1) &&
+                            updateQty(item._id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                      <p className="text-lg font-semibold text-[#2ea2cc]">
+                        ₹{item.price * item.quantity}
+                      </p>
+                    </div>
 
+                    {/* Remove Button */}
+                    <div className="lg:col-span-3 ">
+                      <button
+                        onClick={() => removeFromCart(item._id)}
+                        className="p-2 bg-red-50 hover:bg-red-100 rounded-full transition"
+                      >
+                        <X className="w-4 h-4 text-red-500" />
+                      </button>
                     </div>
                   </div>
-                  <button
-                    onClick={() =>
-                      removeFromCart(
-                        item._id,
-                        item.color || item.selectedColor?.colorName
-                      )
-                    }
-                    className="cursor-pointer"
-                  >
-                    <X className="w-4 h-4 text-red-500" />
-                  </button>
-                </div>
+                 </div>
               ))}
             </div>
 
-            <div className="p-4   space-y-4">
-              <div className="flex gap-2">
+            {/* Coupon + Summary */}
+            <div className="bg-white  border border-gray-100 p-6">
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mb-4">
                 <input
                   type="text"
                   placeholder="Enter coupon"
                   value={coupon}
                   onChange={(e) => setCoupon(e.target.value.toUpperCase())}
-                  className="flex-1 border-b-[1px] border-[#99571d]   text-md  outline-none"
+                  className="flex-1 border-b text-md outline-none py-1"
                 />
                 <button
                   onClick={handleApplyCoupon}
-                  className="bg-[#B67032] text-white px-4 py-2 rounded-md text-md"
+                  className="bg-[#F59383] text-white px-6 py-2 rounded-md text-md w-full sm:w-auto"
                 >
                   Apply
                 </button>
               </div>
 
-              <div className="text-md space-y-1">
+              <div className="text-md space-y-2">
                 <div className="flex justify-between">
                   <span>Shipping</span>
                   <span className="text-gray-500">Calculated at checkout</span>
@@ -178,12 +195,10 @@ export default function CartSidebar() {
                 {discountPercent > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>Discount ({appliedCoupon})</span>
-                    <span>
-                      - ₹{Math.floor((total * discountPercent) / 100)}
-                    </span>
+                    <span>- ₹{Math.floor((total * discountPercent) / 100)}</span>
                   </div>
                 )}
-                <div className="flex justify-between font-semibold text-base">
+                <div className="flex justify-between font-semibold text-base border-t pt-3">
                   <span>Subtotal</span>
                   <span>
                     ₹
@@ -194,30 +209,25 @@ export default function CartSidebar() {
                 </div>
               </div>
 
-              <Link href={'/checkout'}
-            
-                className="w-full bg-[#B67032] text-white py-2 mt-4 rounded-md"
-              >
-                Place Order
-              </Link>
+              <div className="flex flex-col gap-4 mt-6">
+                <Link
+                  href={"/checkout"}
+                  className="flex-1 bg-[#F59383] text-white py-2 text-center block hover:bg-[#F59383] transition"
+                >
+                  Place Order
+                </Link>
 
-              <Link href={'/'}
-                className="text-center text-md text-[#B67032] underline mt-3 w-full"
-              >
-                Or Continue Shopping
-              </Link>
+                <Link
+                  href={"/"}
+                  className="flex-1 text-center text-md text-[#F59383] underline hover:text-[#F59383]"
+                >
+                  Continue Shopping
+                </Link>
+              </div>
             </div>
           </div>
-        )} */}
+        )}
       </div>
-
-      {/* <CheckoutSidebar
-        isOpen={showCheckout}
-        setIsOpen={setShowCheckout}
-        cart={cart}
-        total={total}
-        discountPercent={discountPercent}
-      /> */}
     </>
   );
 }

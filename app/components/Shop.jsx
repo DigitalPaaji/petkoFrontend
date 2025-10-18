@@ -14,49 +14,49 @@ const ShopByPet = ({ categories = [] }) => {
     {
       id: 2,
       name: "Pharmacy",
-      image: "/Images/frontend/bg.webp",
+      image: "https://demo2.themelexus.com/ziggy/wp-content/uploads/2022/05/h2_category2.jpg",
       productCount: 4,
       slug: "pharmacy"
     },
     {
       id: 3,
       name: "Furniture",
-      image: "/Images/frontend/furniture.jpg",
+      image: "https://demo2.themelexus.com/ziggy/wp-content/uploads/2022/05/h2_category3.jpg",
       productCount: 3,
       slug: "furniture"
     },
     {
       id: 4,
       name: "Toys",
-      image: "/Images/frontend/toys.jpg",
+      image: "https://demo2.themelexus.com/ziggy/wp-content/uploads/2022/05/h2_category4.jpg",
       productCount: 1,
       slug: "toys"
     },
     {
       id: 5,
       name: "Beds",
-      image: "/Images/frontend/beds.jpg",
+      image: "https://demo2.themelexus.com/ziggy/wp-content/uploads/2022/05/h2_category5.jpg",
       productCount: 5,
       slug: "beds"
     },
     {
       id: 6,
       name: "Bowls",
-      image: "/Images/frontend/bowls.jpg",
+      image: "https://demo2.themelexus.com/ziggy/wp-content/uploads/2022/05/h2_category6.jpg",
       productCount: 3,
       slug: "bowls"
     },
     {
       id: 7,
       name: "Treats",
-      image: "/Images/frontend/treats.jpg",
+      image: "https://demo2.themelexus.com/ziggy/wp-content/uploads/2022/05/h2_category7.jpg",
       productCount: 4,
       slug: "treats"
     },
     {
       id: 8,
       name: "Crates",
-      image: "/Images/frontend/crates.jpg",
+      image: "	https://demo2.themelexus.com/ziggy/wp-content/uploads/2022/05/h2_category8.jpg",
       productCount: 3,
       slug: "crates"
     }
@@ -65,9 +65,9 @@ const ShopByPet = ({ categories = [] }) => {
   const displayCategories = categories.length > 0 ? categories : defaultCategories;
 
   return (
-    <section className="relative py-16 bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
-      {/* Top Wave Shape */}
-      <div className="absolute bottom-0 left-0 w-full transform rotate-180">
+    <section className="relative py-24 overflow-hidden">
+  {/* bg-gradient-to-br from-[#f48d7f80] to-[#f48d7f23] */}
+      {/* <div className="absolute bottom-0 left-0 w-full transform rotate-180">
         <svg 
           viewBox="0 0 1200 120" 
           preserveAspectRatio="none" 
@@ -80,7 +80,7 @@ const ShopByPet = ({ categories = [] }) => {
         </svg>
       </div>
 
-      {/* Bottom Wave Shape */}
+
       <div className="absolute top-0 left-0 w-full">
         <svg 
           viewBox="0 0 1200 120" 
@@ -92,18 +92,15 @@ const ShopByPet = ({ categories = [] }) => {
             fill="currentColor"
           ></path>
         </svg>
-      </div>
+      </div> */}
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Heading */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-3">
-            <FaPaw className="text-indigo-600 text-2xl" />
-            <span>Shop By Pet</span>
+        <div className="text-start mb-12">
+          <h2 className="border-b border-[#6666664d] py-4 px-6 transition-colors duration-200 font-semibold text-xl lg:text-3xl ">
+            Shop By Pet
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Discover everything your furry friend needs for a happy and healthy life
-          </p>
+          
         </div>
 
         {/* Categories Grid */}
@@ -111,51 +108,49 @@ const ShopByPet = ({ categories = [] }) => {
   {displayCategories.map((category) => (
     <div 
       key={category.id}
-      className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+      className="group bg-white rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
     >
       <a 
         href={`/categories/${category.slug}`}
         className="block"
       >
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-32 overflow-hidden">
           {/* Category Image with Hover Scale Effect */}
-          <div 
-            className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
-            style={{ backgroundImage: `url(${category.image})` }}
-          >
-            {/* Gradient Overlay for Better Text Readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
-            
-            {/* Content Overlay - Flex Row Layout */}
-            <div className="relative h-full flex items-center justify-between px-6">
-              {/* Text Content */}
-              <div className="text-white">
-                <h3 className="text-2xl font-bold mb-1 transform group-hover:translate-x-1 transition-transform duration-300">
-                  {category.name}
-                </h3>
-                <p className="text-gray-200 text-sm font-medium">
-                  {category.productCount} products
-                </p>
-              </div>
-              
-              {/* Icon/Link Button */}
-              <div className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full group-hover:bg-white group-hover:scale-110 transition-all duration-300 border border-white/30">
-                <FaAngleRight className="text-white group-hover:text-indigo-600 transition-colors" />
-              </div>
-            </div>
-          </div>
+         <div className="relative w-full h-full overflow-hidden">
+  {/* Background Image with Scale Effect */}
+  <div
+    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+    style={{ backgroundImage: `url(${category.image})` }}
+  ></div>
+
+  {/* Gradient Overlay */}
+  {/* <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div> */}
+
+  {/* Foreground Content */}
+  <div className="relative h-full flex items-center justify-end gap-10 px-6">
+    {/* Text Content */}
+    <div className="text-white z-10">
+      <h3 className="text-lg font-bold mb-1">{category.name}</h3>
+      <p className="text-gray-200 text-sm font-bold">
+        {category.productCount} products
+      </p>
+    </div>
+
+    {/* Icon Button */}
+    <div className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full group-hover:bg-white transition-all duration-300 border border-white/30 z-10">
+      <FaAngleRight className="text-white group-hover:text-[#F48C7F] transition-colors" />
+    </div>
+  </div>
+</div>
+
         </div>
       </a>
     </div>
   ))}
 </div>
 
-        {/* View All Button */}
-        <div className="text-center mt-12">
-          <button className="bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-indigo-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
-            View All Categories
-          </button>
-        </div>
+
+       
       </div>
     </section>
   );
