@@ -195,7 +195,7 @@ const Page = () => {
                             </span>
                           )}
                           {product.petid && (
-                            <span className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium block">
+                            <span className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium ">
                               <FiTag className="w-3 h-3 mr-1" />
                               {product.petid.type}
                             </span>
