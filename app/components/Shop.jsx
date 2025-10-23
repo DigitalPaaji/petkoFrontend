@@ -65,41 +65,15 @@ const ShopByPet = ({ categories = [] }) => {
   const displayCategories = categories.length > 0 ? categories : defaultCategories;
 
   return (
-    <section className="relative py-24 overflow-hidden">
-  {/* bg-gradient-to-br from-[#f48d7f80] to-[#f48d7f23] */}
-      {/* <div className="absolute bottom-0 left-0 w-full transform rotate-180">
-        <svg 
-          viewBox="0 0 1200 120" 
-          preserveAspectRatio="none" 
-          className="w-full h-16 text-white"
-        >
-          <path 
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" 
-            fill="currentColor"
-          ></path>
-        </svg>
-      </div>
+    <section className="relative  py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
 
 
-      <div className="absolute top-0 left-0 w-full">
-        <svg 
-          viewBox="0 0 1200 120" 
-          preserveAspectRatio="none" 
-          className="w-full h-16 text-white"
-        >
-          <path 
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" 
-            fill="currentColor"
-          ></path>
-        </svg>
-      </div> */}
 
-      <div className="container mx-auto px-4 relative z-10">
+
+      <div className="">
         {/* Section Heading */}
-        <div className="text-start mb-12">
-          <h2 className="border-b border-[#6666664d] py-4 px-6 transition-colors duration-200 font-semibold text-xl lg:text-3xl ">
+        <div className="text-start mb-12 border-b border-[#6666664d] py-4 px-6 transition-colors duration-200 font-semibold text-xl lg:text-3xl ">
             Shop By Pet
-          </h2>
           
         </div>
 

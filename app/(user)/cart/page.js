@@ -68,7 +68,7 @@ export default function CartSidebar() {
     <>
       <InnerBanner title={"Cart"} />
 
-      <div className="relative z-[999] flex flex-col justify-between h-full px-4 md:px-12 xl:px-24 2xl:px-40 my-16">
+      <div className="relative z-[999] flex flex-col justify-between h-full px-4 md:px-12 xl:px-24 2xl:px-0 my-16">
         {cart.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center text-gray-500">
             <Image

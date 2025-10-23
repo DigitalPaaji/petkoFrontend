@@ -135,7 +135,7 @@ function RelatedProducts() {
           >
             {loop.map((item, idx) => (
               <SwiperSlide key={idx}>
-                <div className="cursor-default group w-full p-4 bg-white overflow-hidden  transition-transform duration-300 border border-transparent hover:border-[#6666664d] ">
+                <div className="cursor-default group w-full bg-white overflow-hidden  transition-transform duration-300 border border-transparent hover:border-[#6666664d] ">
                   <div className="relative w-full aspect-square overflow-hidden ">
                     <img
                       src={item.images?.[0]}

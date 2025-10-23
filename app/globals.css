@@ -31,7 +31,7 @@
   color: #666;
   font-weight: 500;
   padding: 0.5rem 0;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease-in-out;
 }
 
 .nav-links a:hover {
@@ -48,7 +48,7 @@
   height: 1px;
   background: #fff;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .nav-links a:hover::before {
@@ -64,8 +64,8 @@
   width: 240px;
   background: #fff;
   border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  padding: 6px;
+  /* border-radius: 8px; */
+  padding: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   z-index: 50;
   animation: fadeIn 0.2s ease-in-out;
@@ -83,23 +83,16 @@
 }
 
 .dropdown-section + .dropdown-section {
-  margin-top: 10px;
+  margin-top: 16px;
 }
 
-.dropdown-section h4 {
-  font-size: 16px;
-}
 
+/* Optional fade animation */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+
 
 .bgBanner{
   background-color: #b6703244;
@@ -127,4 +120,23 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+
+
+
+
+@keyframes fadeOut {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.3s ease-out;
 }

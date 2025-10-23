@@ -3,84 +3,123 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import { Heart, ShoppingBag, Search } from "lucide-react";
-
-// adjust these to your actual locations
-// import { Product } from "../../components/entities/Product";
-// import { useCart } from "../../components/context/GlobalContext";
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filters, setFilters] = useState({
-    category: "",
-    priceRange: "",
+    category: [],
+    priceRange: [],
     search: "",
   });
   const [sortBy, setSortBy] = useState("featured");
-//   const { addToCart } = useCart();
 
-  // Read ?category= from URL in a Next-safe way
-  const searchParams = useSearchParams();
-  const categoryParam = searchParams.get("category");
+  // ✅ Static products for now
+  const staticProducts = [
+    {
+      id: 1,
+      name: "Cotton T-Shirt",
+      category: "clothing",
+      price: 40,
+      original_price: 50,
+      images: ["/images/sample1.jpg"],
+      colors: ["red", "blue"],
+      rating: 4.2,
+      featured: true,
+      created_date: "2025-05-01",
+    },
+    {
+      id: 2,
+      name: "Leather Bag",
+      category: "bags",
+      price: 120,
+      original_price: 150,
+      images: ["/images/sample2.jpg"],
+      colors: ["brown"],
+      rating: 4.8,
+      featured: false,
+      created_date: "2025-04-20",
+    },
+    {
+      id: 3,
+      name: "Silver Necklace",
+      category: "jewelry",
+      price: 180,
+      original_price: 180,
+      images: ["/images/sample3.jpg"],
+      colors: ["silver"],
+      rating: 4.7,
+      featured: true,
+      created_date: "2025-04-10",
+    },
+    {
+      id: 4,
+      name: "Running Shoes",
+      category: "shoes",
+      price: 90,
+      original_price: 120,
+      images: ["/images/sample4.jpg"],
+      colors: ["black", "white"],
+      rating: 4.5,
+      featured: false,
+      created_date: "2025-03-30",
+    },
+  ];
 
   const loadProducts = useCallback(async () => {
-    try {
-      const allProducts = await Product.list("-created_date", 50);
-      setProducts(allProducts || []);
-    } catch (error) {
-      console.error("Error loading products:", error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    setProducts(staticProducts);
+    setLoading(false);
   }, []);
 
   const applyFiltersAndSort = useCallback(() => {
     let filtered = [...products];
 
-    // Category
-    if (filters.category) {
-      filtered = filtered.filter(
-        (p) => (p.category || "").toLowerCase() === filters.category.toLowerCase()
+    // Category (checkbox)
+    if (filters.category.length > 0) {
+      filtered = filtered.filter((p) =>
+        filters.category.includes(p.category)
       );
     }
 
-    // Search (name + description)
+    // Search
     if (filters.search) {
       const q = filters.search.toLowerCase();
       filtered = filtered.filter(
         (p) =>
           (p.name || "").toLowerCase().includes(q) ||
-          (p.description || "").toLowerCase().includes(q)
+          (p.category || "").toLowerCase().includes(q)
       );
     }
 
-    // Price
-    if (filters.priceRange) {
-      if (filters.priceRange.includes("-")) {
-        const [min, max] = filters.priceRange.split("-").map(Number);
-        filtered = filtered.filter(
-          (p) => Number(p.price) >= min && Number(p.price) <= max
-        );
-      } else if (filters.priceRange.endsWith("+")) {
-        const min = Number(filters.priceRange.replace("+", ""));
-        filtered = filtered.filter((p) => Number(p.price) >= min);
-      }
+    // Price Range (checkbox)
+    if (filters.priceRange.length > 0) {
+      filtered = filtered.filter((p) => {
+        return filters.priceRange.some((range) => {
+          if (range.includes("-")) {
+            const [min, max] = range.split("-").map(Number);
+            return p.price >= min && p.price <= max;
+          } else if (range.endsWith("+")) {
+            const min = Number(range.replace("+", ""));
+            return p.price >= min;
+          }
+          return true;
+        });
+      });
     }
 
-    // Sort
+    // Sorting
     switch (sortBy) {
       case "price-low":
-        filtered.sort((a, b) => Number(a.price) - Number(b.price));
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case "price-high":
-        filtered.sort((a, b) => Number(b.price) - Number(a.price));
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case "name":
-        filtered.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       case "newest":
         filtered.sort(
@@ -88,66 +127,47 @@ export default function Shop() {
         );
         break;
       default:
-        // featured first (truthy featured goes earlier)
         filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
     }
 
     setFilteredProducts(filtered);
   }, [products, filters, sortBy]);
 
-  // initial load + seed category from URL
   useEffect(() => {
     loadProducts();
   }, [loadProducts]);
 
   useEffect(() => {
-    if (categoryParam) {
-      setFilters((prev) => ({ ...prev, category: categoryParam }));
-    }
-  }, [categoryParam]);
-
-  // re-derive whenever inputs change
-  useEffect(() => {
     applyFiltersAndSort();
   }, [applyFiltersAndSort]);
 
-  const handleQuickAdd = (product) => {
-    const size = product.sizes?.[0] || "M";
-    const color = product.colors?.[0] || "Default";
-    addToCart(product, size, color);
+  const handleCheckboxChange = (type, value) => {
+    setFilters((prev) => {
+      const updated = prev[type].includes(value)
+        ? prev[type].filter((v) => v !== value)
+        : [...prev[type], value];
+      return { ...prev, [type]: updated };
+    });
   };
 
   const clearFilters = () =>
-    setFilters({ category: "", priceRange: "", search: "" });
+    setFilters({ category: [], priceRange: [], search: "" });
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-64 mb-8" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i}>
-                <div className="aspect-square bg-gray-200 rounded-lg mb-4" />
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                <div className="h-4 bg-gray-200 rounded w-1/2" />
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex justify-center items-center text-gray-500">
+        Loading products...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="">
+      <div className="py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-light text-gray-900 mb-2">
-            {filters.category
-              ? filters.category.charAt(0).toUpperCase() + filters.category.slice(1)
-              : "All Products"}
+            Shop All Products
           </h1>
           <p className="text-gray-600">
             Showing {filteredProducts.length} of {products.length} products
@@ -155,7 +175,7 @@ export default function Shop() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
+          {/* Filters */}
           <aside className="lg:w-64 flex-shrink-0">
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
@@ -188,52 +208,60 @@ export default function Shop() {
                 </div>
               </div>
 
-              {/* Category */}
+              {/* Category Checkboxes */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Category
                 </label>
-                <select
-                  value={filters.category}
-                  onChange={(e) =>
-                    setFilters({ ...filters, category: e.target.value })
-                  }
-                  className="w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-gray-200 bg-white"
-                >
-                  <option value="">All Categories</option>
-                  <option value="clothing">Clothing</option>
-                  <option value="accessories">Accessories</option>
-                  <option value="shoes">Shoes</option>
-                  <option value="bags">Bags</option>
-                  <option value="jewelry">Jewelry</option>
-                </select>
+                {["clothing", "accessories", "shoes", "bags", "jewelry"].map(
+                  (cat) => (
+                    <label
+                      key={cat}
+                      className="flex items-center gap-2 text-sm text-gray-700 mb-1"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={filters.category.includes(cat)}
+                        onChange={() => handleCheckboxChange("category", cat)}
+                        className="rounded border-gray-300 text-green-700 focus:ring-green-500"
+                      />
+                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    </label>
+                  )
+                )}
               </div>
 
-              {/* Price */}
+              {/* Price Range Checkboxes */}
               <div className="mb-2">
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Price Range
                 </label>
-                <select
-                  value={filters.priceRange}
-                  onChange={(e) =>
-                    setFilters({ ...filters, priceRange: e.target.value })
-                  }
-                  className="w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-gray-200 bg-white"
-                >
-                  <option value="">All Prices</option>
-                  <option value="0-50">Under $50</option>
-                  <option value="50-100">$50 - $100</option>
-                  <option value="100-200">$100 - $200</option>
-                  <option value="200+">$200+</option>
-                </select>
+                {[
+                  { label: "Under $50", value: "0-50" },
+                  { label: "$50 - $100", value: "50-100" },
+                  { label: "$100 - $200", value: "100-200" },
+                  { label: "$200+", value: "200+" },
+                ].map((p) => (
+                  <label
+                    key={p.value}
+                    className="flex items-center gap-2 text-sm text-gray-700 mb-1"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={filters.priceRange.includes(p.value)}
+                      onChange={() => handleCheckboxChange("priceRange", p.value)}
+                      className="rounded border-gray-300 text-green-700 focus:ring-green-500"
+                    />
+                    {p.label}
+                  </label>
+                ))}
               </div>
             </div>
           </aside>
 
-          {/* Main */}
+          {/* Products */}
           <section className="flex-1">
-            {/* Sort Bar */}
+            {/* Sort */}
             <div className="flex justify-between items-center mb-6 bg-white rounded-lg p-4 shadow-sm">
               <span className="text-sm text-gray-600">
                 {filteredProducts.length} Products
@@ -254,7 +282,7 @@ export default function Shop() {
               </div>
             </div>
 
-            {/* Products Grid */}
+            {/* Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <div
@@ -271,41 +299,11 @@ export default function Shop() {
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                       className="object-cover transform group-hover:scale-105 transition-transform duration-700"
-                      priority={false}
                     />
-
-                    {product.original_price &&
-                      Number(product.original_price) > Number(product.price) && (
-                        <div className="absolute top-3 left-3 bg-green-700 text-white text-xs font-medium px-2 py-1 rounded">
-                          Sale
-                        </div>
-                      )}
-
-                    {/* Hover Actions */}
-                    <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300" />
-                    <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleQuickAdd(product)}
-                          className="flex-1 inline-flex items-center justify-center gap-1 text-sm bg-white text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md"
-                        >
-                          <ShoppingBag className="h-4 w-4" />
-                          Quick Add
-                        </button>
-                        <button
-                          type="button"
-                          className="inline-flex items-center justify-center px-3 py-2 text-sm bg-white hover:bg-gray-100 border border-gray-200 rounded-md"
-                          aria-label="Add to wishlist"
-                        >
-                          <Heart className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
                   </div>
 
                   <div className="p-4">
-                    <Link href={`/product/${product.name}/${product.id}`} className="block">
+                    <Link href="#" className="block">
                       <h3 className="font-medium text-gray-900 group-hover:text-green-700 transition-colors duration-200 mb-2 line-clamp-2">
                         {product.name}
                       </h3>
@@ -314,36 +312,21 @@ export default function Shop() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-semibold text-gray-900">
-                          ${Number(product.price).toFixed(2)}
+                          ${product.price.toFixed(2)}
                         </span>
-                        {product.original_price &&
-                          Number(product.original_price) > Number(product.price) && (
-                            <span className="text-sm text-gray-500 line-through">
-                              ${Number(product.original_price).toFixed(2)}
-                            </span>
-                          )}
+                        {product.original_price > product.price && (
+                          <span className="text-sm text-gray-500 line-through">
+                            ${product.original_price.toFixed(2)}
+                          </span>
+                        )}
                       </div>
-
                       {product.rating && (
-                        <div className="flex items-center text-xs text-gray-500">
+                        <div className="text-xs text-gray-500 flex items-center">
                           <span>★</span>
                           <span className="ml-1">{product.rating}</span>
                         </div>
                       )}
                     </div>
-
-                    {Array.isArray(product.colors) && product.colors.length > 0 && (
-                      <div className="flex gap-1 mt-3">
-                        {product.colors.slice(0, 4).map((color, i) => (
-                          <span
-                            key={i}
-                            className="w-4 h-4 rounded-full border border-gray-200"
-                            style={{ backgroundColor: String(color).toLowerCase() }}
-                            title={color}
-                          />
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
               ))}

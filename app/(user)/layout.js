@@ -3,6 +3,7 @@ import "../globals.css";
 import Offer from "../components/Offer";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import PopupModal from "../components/Popup";
 // import LoginSignup from "../components/user/LoginSignup";
 // import Wishlist from "../components/user/Wishlist";
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
 
         {children}
         <Footer />
+        <PopupModal/>
       </body>
     </html>
   );

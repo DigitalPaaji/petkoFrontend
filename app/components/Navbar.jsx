@@ -1,15 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Menu,
-  X,
-  ShoppingCart,
-  User,
-  Search,
-  Heart,
-} from "lucide-react";
+import { Menu, X, ShoppingCart, User, Search, Heart } from "lucide-react";
 import { LuPhone } from "react-icons/lu";
+import { CiSearch } from "react-icons/ci";
+import { FiSearch  } from "react-icons/fi";
+
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Link from "next/link";
 import Image from "next/image";
@@ -28,38 +24,56 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    {
-      name: "Shop",
-      dropdown: [
-        {
-          name: "Shop Pages",
-          items: ["Shop Default", "Shop Carousel", "Woo Pages", "Order Tracking"],
-        },
-      ],
-    },
-    {
-      name: "Pages",
-      dropdown: [
-        {
-          name: "General Pages",
-          items: ["About Us", "Contact", "FAQs", "Coming Soon", "Become a Vendor"],
-        },
-      ],
-    },
-    { name: "Blog", href: "/blog" },
-  ];
+const navLinks = [
+  { name: "Home", href: "/" },
+
+  // SHOP DROPDOWN (will be fetched dynamically)
+  {
+    name: "Shop",
+    dropdown: [
+      {
+        name: "Categories",
+        // These will come dynamically from backend (e.g., Dog, Cat, Bird, etc.)
+        items: [
+          // Example placeholders:
+          "Dogs",
+          "Cats",
+          "Birds",
+          "Fish",
+        ],
+      },
+    ],
+  },
+
+  // PAGES DROPDOWN (static informational pages)
+  {
+    name: "Pages",
+    dropdown: [
+      {
+        name: "Information",
+        items: [
+          "Delivery Information",
+          "Return & Refund Policy",
+          "Privacy Policy",
+          "Terms & Conditions",
+        ],
+      },
+      {
+        name: "Support",
+        items: ["Contact Us", "FAQ", "About Us"],
+      },
+    ],
+  },
+
+  { name: "Blog", href: "/blog" },
+];
+
 
   return (
     <>
       {/* ----------------- MAIN NAVBAR (before scroll) ----------------- */}
       {!scrolled && (
-
-  <nav
-  className=' w-full bg-white z-[999] transition-all duration-500 ease-out '
->
-
+        <nav className=" w-full bg-white z-[999] transition-all duration-500 ease-out border-b border-[#6666664d] ">
           {/* Top Section */}
           <div className="flex items-center justify-between py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
             {/* Logo */}
@@ -73,39 +87,99 @@ export default function Navbar() {
               />
             </Link>
 
+
+ <div className="hidden lg:flex lg:space-x-8 lg:nav-links">
+              {navLinks.map((link, index) => (
+                <div
+                  key={link.name}
+                  className="relative group"
+                  onMouseEnter={() => setActiveDropdown(index)}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <Link
+                    href={link.href || "#"}
+                    className="font-medium py-4 text-[#666] hover:text-[#F48C7F] flex items-center gap-1 relative"
+                  >
+                    {link.name}
+                    {link.dropdown && (
+                      <RiArrowDropDownLine className="text-2xl" />
+                    )}
+                  </Link>
+
+          {/* Dropdown Menu */}
+{link.dropdown && activeDropdown === index && (
+  <div className="dropdown-menu">
+    <div className="dropdown-arrow"></div>
+
+    {link.dropdown.map((section) => (
+      <div key={section.name} className="dropdown-section">
+        <h4 className="font-semibold text-[#333] mb-2 ">
+          {section.name}
+        </h4>
+        <ul>
+          {section.items.map((item) => (
+            <li key={item}>
+              <Link
+                href="#"
+                className="block py-1 text-[#555] hover:text-[#F48C7F] "
+              >
+                {item}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+)}
+
+                </div>
+              ))}
+            </div>
+
+            
+            <div className="flex items-center gap-4">
             {/* Search Bar */}
-            <div className="hidden lg:flex items-center justify-center gap-0.5 w-[500px]">
+            <div className="hidden xl:flex items-center justify-center gap-1 w-[340px]">
+              <div className="flex items-center gap-1 w-full px-2 py-1.5 border border-[#6666664d] rounded-md">
+              <CiSearch  className="w-6 h-6 text-[#666] object-cover"/>
+              
               <input
                 type="search"
                 placeholder="Search Pet Accessories"
-                className="w-full px-6 py-1.5 border border-[#6666664d] rounded-md"
+                className="focus:outline-none"
               />
+              </div>
               <button className="text-md text-white font-semibold bg-[#F48C7F] px-4 py-1.5 rounded-md">
                 Search
               </button>
             </div>
 
             {/* Hotline */}
-            <div className="hidden xl:flex items-center gap-2">
+            {/* <div className="hidden xl:flex items-center gap-2">
               <LuPhone className="w-6 h-6 text-[#666]" />
               <div>
                 <h4 className="text-md font-medium text-[#666]">Hotline</h4>
                 <h3 className="font-semibold text-md">1-800-234-5678</h3>
               </div>
-            </div>
+            </div> */}
 
             {/* Icons + Hamburger */}
             <div className="flex items-center space-x-3 lg:space-x-6">
+              <button className="block xl:hidden ">
+                <FiSearch  className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
+
+              </button>
               <Link href="/cart" className="relative">
-                <ShoppingCart className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
+                <ShoppingCart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
                 <span className="absolute -top-3 -right-3 bg-[#F48C7F] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
                   0
                 </span>
               </Link>
-               <Link href="/wishlist">
-              <Heart className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
-            </Link>
-              <User className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
+              <Link href="/wishlist">
+                <Heart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
+              </Link>
+              <User className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
 
               {/* Hamburger */}
               <button
@@ -114,76 +188,78 @@ export default function Navbar() {
                 aria-label="Toggle Menu"
               >
                 {isOpen ? (
-                  <X className="w-7 h-7 text-gray-700 transition-transform transform rotate-180 duration-300" />
+                  <X className="w-6 h-6 text-gray-700 transition-transform transform rotate-180 duration-300" />
                 ) : (
-                  <Menu className="w-7 h-7 text-gray-700 transition-transform duration-300" />
+                  <Menu className="w-6 h-6 text-gray-700 transition-transform duration-300" />
                 )}
               </button>
             </div>
+</div>
           </div>
 
           {/* Bottom Nav Links */}
+{/* 
+          <div className="hidden lg:flex items-center justify-between px-4 md:px-12 xl:px-24 2xl:px-40 navbar-container">
+           
+            <div className="flex space-x-8 nav-links">
+              {navLinks.map((link, index) => (
+                <div
+                  key={link.name}
+                  className="relative group"
+                  onMouseEnter={() => setActiveDropdown(index)}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <Link
+                    href={link.href || "#"}
+                    className="font-medium py-4 text-[#666] hover:text-[#F48C7F] flex items-center gap-1 relative"
+                  >
+                    {link.name}
+                    {link.dropdown && (
+                      <RiArrowDropDownLine className="text-2xl" />
+                    )}
+                  </Link>
 
-        
-        <div className="hidden lg:flex items-center justify-between px-4 md:px-12 xl:px-24 2xl:px-40 navbar-container">
-  {/* ---------- LEFT NAV LINKS ---------- */}
-  <div className="flex space-x-8 nav-links">
-    {navLinks.map((link, index) => (
-      <div
-        key={link.name}
-        className="relative group"
-        onMouseEnter={() => setActiveDropdown(index)}
-        onMouseLeave={() => setActiveDropdown(null)}
-      >
-        <Link
-          href={link.href || "#"}
-          className="font-medium py-4 text-[#666] hover:text-[#F48C7F] flex items-center gap-1 relative"
-        >
-          {link.name}
-          {link.dropdown && (
-            <RiArrowDropDownLine className="text-2xl" />
-          )}
-        </Link>
+         
+{link.dropdown && activeDropdown === index && (
+  <div className="dropdown-menu">
+    <div className="dropdown-arrow"></div>
 
-        {/* Dropdown Menu */}
-        {link.dropdown && activeDropdown === index && (
-          <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-md p-4 mt-1 shadow-lg z-50 w-52">
-            {link.dropdown.map((section) => (
-              <div key={section.name}>
-                <h4 className="font-semibold text-[#333] mb-2 text-sm">
-                  {section.name}
-                </h4>
-                <ul>
-                  {section.items.map((item) => (
-                    <li key={item}>
-                      <Link
-                        href="#"
-                        className="block py-1 text-[#555] hover:text-[#F48C7F] text-sm"
-                      >
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        )}
+    {link.dropdown.map((section) => (
+      <div key={section.name} className="dropdown-section">
+        <h4 className="font-semibold text-[#333] mb-2 text-sm">
+          {section.name}
+        </h4>
+        <ul>
+          {section.items.map((item) => (
+            <li key={item}>
+              <Link
+                href="#"
+                className="block py-1 text-[#555] hover:text-[#F48C7F] text-sm"
+              >
+                {item}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     ))}
   </div>
+)}
 
-  {/* ---------- RIGHT WISHLIST ---------- */}
-  <div className="flex items-center space-x-2 text-sm text-[#2ea2cc]">
-    <Heart className="w-5 h-5" />
-    <span className="bg-[#F48C7F] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
-      0
-    </span>
-    <h3 className="text-md font-medium">YOUR WISHLIST</h3>
-  </div>
-</div>
+                </div>
+              ))}
+            </div>
 
-        
+   
+            <div className="flex items-center space-x-2 text-sm text-[#2ea2cc]">
+              <Heart className="w-5 h-5" />
+              <span className="bg-[#F48C7F] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                0
+              </span>
+              <h3 className="text-md font-medium">YOUR WISHLIST</h3>
+            </div>
+          </div> */}
+
           {/* <div className="hidden lg:flex items-center justify-between px-4 md:px-12 xl:px-24 2xl:px-40 border-y border-[#eee]">
             <div className="flex space-x-8">
               {navLinks.map((link, index) => (
@@ -236,23 +312,17 @@ export default function Navbar() {
               <h3 className="text-md font-medium">YOUR WISHLIST</h3>
             </div>
           </div> */}
-
-
-
         </nav>
       )}
 
       {/* ----------------- SCROLLED NAV ----------------- */}
       {scrolled && (
         <nav
-     
-         data-aos="fade-down"
+          data-aos="fade-down"
           data-aos-offset="100"
           data-aos-duration="800"
-     
-  className={`fixed top-0 left-0 w-full bg-white z-[999] transition-all duration-500 ease-out translate-y-0 opacity-100`}
->
-
+          className={`fixed top-0 left-0 w-full bg-white z-[999] transition-all duration-500 ease-out translate-y-0 opacity-100`}
+        >
           {/* Top Section */}
           <div className="flex items-center justify-between py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
             {/* Logo */}
@@ -290,13 +360,13 @@ export default function Navbar() {
             {/* Icons + Hamburger */}
             <div className="flex items-center space-x-3 lg:space-x-6">
               <Link href="/cart" className="relative">
-                <ShoppingCart className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
+                <ShoppingCart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
                 <span className="absolute -top-3 -right-3 bg-[#F48C7F] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
                   0
                 </span>
               </Link>
-              <Heart className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
-              <User className="w-7 h-7 text-gray-600 hover:text-[#F48C7F]" />
+              <Heart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
+              <User className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
 
               {/* Hamburger */}
               <button
@@ -305,15 +375,13 @@ export default function Navbar() {
                 aria-label="Toggle Menu"
               >
                 {isOpen ? (
-                  <X className="w-7 h-7 text-gray-700 transition-transform transform rotate-180 duration-300" />
+                  <X className="w-6 h-6 text-gray-700 transition-transform transform rotate-180 duration-300" />
                 ) : (
-                  <Menu className="w-7 h-7 text-gray-700 transition-transform duration-300" />
+                  <Menu className="w-6 h-6 text-gray-700 transition-transform duration-300" />
                 )}
               </button>
             </div>
           </div>
-
-
         </nav>
       )}
 
