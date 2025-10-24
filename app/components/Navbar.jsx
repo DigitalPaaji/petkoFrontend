@@ -179,8 +179,9 @@ const navLinks = [
               <Link href="/wishlist">
                 <Heart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
               </Link>
-              <User className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
+              <Link className="" href={"/user/dashboard"}>    <User className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
 
+</Link> 
               {/* Hamburger */}
               <button
                 className="lg:hidden"

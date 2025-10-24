@@ -50,7 +50,7 @@ transition={Flip}
 
         {children}
         <Footer />
-        <PopupModal/>
+        {/* <PopupModal/> */}
       </body>
     </html>
   );

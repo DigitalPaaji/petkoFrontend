@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook, FaTwitter } from 'react-icons/fa';
 
 const AuthLayout = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -33,7 +32,6 @@ const AuthLayout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(isLogin ? 'Logging in:' : 'Signing up:', formData);
   };
 
   return (
@@ -50,18 +48,17 @@ const AuthLayout = () => {
             {/* HEADER */}
             <div variants={itemVariants} className="text-center mb-8">
               <h2 className="text-2xl lg:text-3xl font-normal  mb-2">
-                {isLogin ? 'Log In to Your Account' : 'Create Your Account'}
+                Create Your Account
               </h2>
               <p className="text-gray-500">
-                {isLogin
-                  ? 'Welcome back! Please enter your details below.'
-                  : 'Fill in the details to get started.'}
+               
+                Fill in the details to get started.
               </p>
             </div>
 
             {/* FORM */}
             <form variants={itemVariants} onSubmit={handleSubmit} className="space-y-5">
-              {!isLogin && (
+            
                 <div>
                   <label className="block text-gray-600 text-sm mb-2">Full Name</label>
                   <input
@@ -73,7 +70,7 @@ const AuthLayout = () => {
                     className="w-full border border-gray-300  px-4 py-2 outline-none"
                   />
                 </div>
-              )}
+           
 
               <div>
                 <label className="block text-gray-600 text-sm mb-2">Email Address</label>
@@ -106,7 +103,7 @@ const AuthLayout = () => {
                 </button>
               </div>
 
-              {!isLogin && (
+            
                 <div>
                   <label className="block text-gray-600 text-sm mb-2">Confirm Password</label>
                   <input
@@ -118,9 +115,10 @@ const AuthLayout = () => {
                     className="w-full border border-gray-300  px-4 py-2 outline-none"
                   />
                 </div>
-              )}
+             
 
-              {isLogin && (
+
+             
                 <div className="flex items-center justify-between">
                   <label className="flex items-center gap-2 text-gray-600 text-sm">
                     <input
@@ -136,7 +134,7 @@ const AuthLayout = () => {
                     Forgot Password?
                   </a>
                 </div>
-              )}
+           
 
               <button
                 whileHover={{ scale: 1.02 }}
@@ -144,20 +142,19 @@ const AuthLayout = () => {
                 type="submit"
                 className="w-full bg-[#f58f80] text-white py-3  font-semibold shadow-md hover:bg-[#e87a6c] transition"
               >
-                {isLogin ? 'Login' : 'Sign Up'}
+               Sign Up
               </button>
             </form>
 
             {/* FOOTER LINK - TOGGLE */}
             <div variants={itemVariants} className="text-center mt-6">
               <p className="text-gray-600">
-                {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+               Already have an account?
                 <button
                   type="button"
-                  onClick={() => setIsLogin(!isLogin)}
                   className="text-[#f58f80] font-semibold hover:underline"
                 >
-                  {isLogin ? 'Sign up' : 'Login'}
+                  Sign in
                 </button>
               </p>
             </div>
