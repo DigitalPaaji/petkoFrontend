@@ -181,7 +181,7 @@ export default function CartSidebar() {
                 />
                 <button
                   onClick={handleApplyCoupon}
-                  className="bg-[#F59383] text-white px-6 py-2 rounded-md text-md w-full sm:w-auto"
+                  className="bg-[#F59383] text-white font-semibold px-6 py-2 rounded-md text-md w-full sm:w-auto"
                 >
                   Apply
                 </button>
@@ -212,7 +212,7 @@ export default function CartSidebar() {
               <div className="flex flex-col gap-4 mt-6">
                 <Link
                   href={"/checkout"}
-                  className="flex-1 bg-[#F59383] text-white py-2 text-center block hover:bg-[#F59383] transition"
+                  className="flex-1 bg-[#F59383] text-white font-semibold py-2 text-center block hover:bg-[#F59383] transition"
                 >
                   Place Order
                 </Link>

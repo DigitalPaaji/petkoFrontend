@@ -34,12 +34,12 @@ export default function PopupModal() {
         {/* Modal Content */}
         <div
           ref={modalRef}
-          className="relative w-[600px]  h-[500px] mt-40 aspect-square  mx-auto animate-fadeOut p-6 lg:p-0 "
+          className="relative w-full h-auto lg:w-[600px]  lg:h-[500px] mt-40 aspect-square  mx-auto animate-fadeOut p-6 lg:p-0 "
         >
           {/* Close Button */}
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute -top-4 -right-4 text-gray-600 hover:text-black  cursor-pointer"
+            className="absolute -top-2 lg:-top-4 right-2 lg:-right-4 text-gray-600 hover:text-black  cursor-pointer"
           >
             <X size={22} />
           </button>
