@@ -6,6 +6,8 @@ import { FiPlus, FiTrash2, FiUpload, FiSave, FiDollarSign, FiTag, FiPackage, FiI
 import { baseurl } from "../../components/apis";
 import { toast } from "react-toastify";
 import RichEditor from "../../components/RichEditor";
+import RichTextEditor from "../../components/RichTextEditor";
+
 
 const CreateProduct = () => {
   const router = useRouter();
@@ -253,7 +255,7 @@ const fetchData = async () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Product Description
                   </label>
-                  <RichEditor
+                  <RichTextEditor
                     value={formData.description}
                     onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
                     placeholder="Enter rich product description..."

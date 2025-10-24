@@ -1,7 +1,8 @@
 "use client"
-import React, { useState } from 'react';
+import "../globals.css"
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   FiHome,
   FiUsers,
@@ -24,28 +25,36 @@ import {
   FaCat, 
   FaFish,
   FaShoppingCart,
-  FaRegSmile
+  FaRegSmile,
+  FaBlog
 } from 'react-icons/fa';
 import { BiCategoryAlt } from "react-icons/bi";
 
 
 
-import { Flip, ToastContainer } from 'react-toastify';
+import { Flip, toast, ToastContainer } from 'react-toastify';
+import axios from "axios";
+import { baseurl } from "./components/apis";
 
 const Layout = ({ children }) => {
+  const [lastLogin,setLastlogin]=useState()
+  const [loader,setLoader]= useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter()
 
   const menuItems = [
     // { id: 1, name: 'Dashboard', icon: FiHome, path: '/admin', color: 'text-blue-500' },
     { id: 2, name: 'Customers', icon: FiUsers, path: '/admin/customers', color: 'text-green-500' },
     { id: 3, name: 'Pets', icon: FaPaw, path: '/admin/pets', color: 'text-yellow-500' },
-        { id: 1, name: 'Product Category', icon: BiCategoryAlt, path: '/admin/product-cat', color: 'text-yellow-500' },
+        { id: 3.1, name: 'Product Category', icon: BiCategoryAlt, path: '/admin/product-cat', color: 'text-yellow-500' },
 
     { id: 4, name: 'Products', icon: FiShoppingBag, path: '/admin/products', color: 'text-purple-500' },
     { id: 5, name: 'Orders', icon: FaShoppingCart, path: '/admin/orders', color: 'text-pink-500' },
     { id: 6, name: 'Services', icon: FiHeart, path: '/admin/services', color: 'text-red-500' },
+        { id: 6.1, name: 'Blogs', icon: FaBlog, path: '/admin/blog', color: 'text-yellow-500' },
+
     { id: 7, name: 'Analytics', icon: FiBarChart2, path: '/admin/analytics', color: 'text-indigo-500' },
     { id: 8, name: 'Messages', icon: FiMail, path: '/admin/messages', color: 'text-teal-500' },
     { id: 9, name: 'Settings', icon: FiSettings, path: '/admin/settings', color: 'text-gray-500' },
@@ -66,8 +75,77 @@ const Layout = ({ children }) => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen);
   };
 
+
+const adminAllreadylogin= async()=>{
+  setLoader(true)
+  try {
+    const response = await axios.get(`${baseurl}/admin/getadmin`,{
+      withCredentials:true
+    })
+    const data = await response.data;
+
+    if(!data.success){
+      router.push("/login/admin")
+}
+else{
+  setLastlogin(formatReadableDate(data.admin))
+}
+  } catch (error) {
+          router.push("/login/admin")
+
+  }
+    setLoader(false)
+
+}
+
+
+useEffect(()=>{
+adminAllreadylogin()
+},[])
+
+
+function formatReadableDate(isoString) {
+  const date = new Date(isoString);
+
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+
+  return date.toLocaleString("en-US", options);
+}
+
+
+
+const handelLogout=async()=>{
+  const response = await axios.get(`${baseurl}/admin/logout`,{withCredentials:true})
+  const data = await response.data;
+  if(data.success){
+    toast.success("logout successful")
+              router.push("/login/admin")
+
+
+  }
+}
+
+
+
+
   return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+  <html lang="en">
+  <head>
+    <meta charSet="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+
+    {!loader && 
+      <div className="flex h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       {/* Sidebar Backdrop */}
 
 <ToastContainer
@@ -93,7 +171,7 @@ transition={Flip}
         />
       )}
 
-      {/* Sidebar */}
+
       <div
         className={`fixed inset-y-0 left-0 z-30 w-80 bg-gradient-to-b from-white to-blue-50 shadow-xl transform transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-blue-100 ${
           isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -109,7 +187,9 @@ transition={Flip}
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-gray-800">PetKo</h1>
-                  <p className="text-xs text-gray-500">Admin Panel</p>
+                  {/* <p className="text-xs text-gray-500">Admin Panel</p> */}
+                   <p className="text-xs text-gray-500">{lastLogin}</p>
+
                 </div>
               </div>
             )}
@@ -125,40 +205,19 @@ transition={Flip}
             </button>
           </div>
 
-          {/* Pet Stats */}
-          {/* {isSidebarOpen && (
-            <div className="p-4 border-b border-blue-100 bg-white/50">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Pet Statistics</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {petStats.map((stat, index) => {
-                  const Icon = stat.icon;
-                  return (
-                    <div key={index} className={`p-2 rounded-lg ${stat.color} text-center`}>
-                      <Icon className="inline-block mb-1" />
-                      <div className="text-xs font-semibold">{stat.count}</div>
-                      <div className="text-xs opacity-75">{stat.type}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )} */}
-
-          {/* Navigation Menu */}
+        
           <nav className="flex-1 px-4 py-6 space-y-1">
 
 {  
 
-  <Link
-                  
-                  href={"/admin"}
+  <Link 
+  href={"/admin"}
                   className={`flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
                     pathname=="/admin"
                       ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105'
                       : 'text-gray-600 hover:bg-white hover:shadow-md hover:scale-105'
                   }`}
-                  onClick={() => setIsMobileSidebarOpen(false)}
-                >
+                  onClick={() => setIsMobileSidebarOpen(false)} >
                   <FiHome 
                     size={20} 
                     className={`${ pathname=="/admin" ? 'text-white' : "text-blue-500"} transition-colors`}
@@ -225,7 +284,7 @@ transition={Flip}
               )}
             </div>
             
-            <button className="flex items-center w-full px-4 py-3 text-gray-600 rounded-xl hover:bg-red-50 hover:text-red-600 transition-all duration-200 group">
+            <button  onClick={()=>handelLogout()}  className="flex items-center w-full px-4 py-3 text-gray-600 rounded-xl hover:bg-red-50 hover:text-red-600 transition-all duration-200 group">
               <FiLogOut size={20} className="group-hover:scale-110 transition-transform" />
               {(isSidebarOpen || isMobileSidebarOpen) && (
                 <span className="ml-4 font-medium">Logout</span>
@@ -235,7 +294,6 @@ transition={Flip}
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
         <header className="bg-white/80 backdrop-blur-sm shadow-sm z-10 border-b border-blue-100">
@@ -274,7 +332,16 @@ transition={Flip}
         </main>
       </div>
     </div>
+}
+  </body>
+  </html>
+
+
+
+  
   );
+
+  
 };
 
 export default Layout;

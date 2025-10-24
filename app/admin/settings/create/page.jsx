@@ -86,7 +86,7 @@ const Page = () => {
         submitData.append('logo', formData.logo)
       }
 
-    
+        
 
       const response = await axios.post(`${baseurl}/layout/create`, submitData, {
         headers: {
