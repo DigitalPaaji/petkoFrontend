@@ -106,7 +106,6 @@ const Dashboard = () => {
             <span className="text-gray-500 text-sm ml-2">from last month</span>
           </div>
         </div>
-
         {/* Products Card */}
         <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
           <div className="flex items-center justify-between">

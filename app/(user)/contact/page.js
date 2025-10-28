@@ -1,5 +1,7 @@
 "use client";
+import { baseurl } from "@/app/admin/components/apis";
 import Banner from "@/app/components/InnerBanner";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -55,58 +57,32 @@ export default function ContactForm() {
     setIsSubmitting(true);
 
     try {
-      // const response = await fetch('https://kashishportfolio.onrender.com/send-mail', {
-      const response = await fetch("http://localhost:5000/send-mail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
 
-      const data = await response.json();
-      if (response.ok) {
-        toast.success(
-          data.message || "Your message has been sent successfully!",
-          {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          }
-        );
-        setFormData({
+const response = await axios.post(`${baseurl}/message/create`,formData)
+const data = await response.data;
+if(data.success){
+          toast.success("Your message has been sent successfully!")
+
+
+  setFormData({
           name: "",
           phone: "",
           email: "",
           message: "",
         });
         setIsFormTouched(false);
-      } else {
-        toast.error(data.error || "Something went wrong!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
+
+}
+else{
+  toast.error(data.message)
+}
+
+     
+      
+     
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to send your message. Please try again.", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+        toast.error(data.message)
+
     } finally {
       setIsSubmitting(false);
     }

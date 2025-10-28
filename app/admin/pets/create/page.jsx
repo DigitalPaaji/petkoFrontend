@@ -55,6 +55,7 @@ const Page = () => {
       return;
     }
 
+
     setLoading(true);
     setMessage({ type: '', text: '' });
 
@@ -126,6 +127,7 @@ const Page = () => {
                   </div>
                 </div>
               )}
+
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Pet Type Input */}

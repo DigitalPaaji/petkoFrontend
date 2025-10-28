@@ -154,9 +154,9 @@ const Page = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-4">
                           <div className="relative">
-                            {product.banner_image ? (
+                            {product?.images ? (
                               <img
-                                src={`${imgurl}/uploads/${product.banner_image}`}
+                                src={`${imgurl}/uploads/${product.images[0]}`}
                                 alt={product.title}
                                 className="w-16 h-16 rounded-xl object-cover shadow-sm border border-gray-200"
                               />
@@ -168,7 +168,7 @@ const Page = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <h3 className="text-sm font-semibold text-gray-900 truncate">
-                              {product.title}
+                              {product.name}
                             </h3>
                             <p className="text-xs text-gray-500 mt-1 truncate">
                               {product.slug}
@@ -188,16 +188,16 @@ const Page = () => {
                       {/* Category & Pet Type */}
                       <td className="px-6 py-4">
                         <div className="space-y-2">
-                          {product.categoryid && (
+                          {product.productcategory && (
                             <span className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
                               <FiPackage className="w-3 h-3 mr-1" />
-                              {product.categoryid.product_name}
+                              {product.productcategory.product_name}
                             </span>
                           )}
-                          {product.petid && (
+                          {product.petcategory && (
                             <span className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium ">
                               <FiTag className="w-3 h-3 mr-1" />
-                              {product.petid.type}
+                              {product.petcategory.typme}
                             </span>
                           )}
                         </div>

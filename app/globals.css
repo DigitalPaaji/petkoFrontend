@@ -140,3 +140,9 @@
 .animate-fadeOut {
   animation: fadeOut 0.3s ease-out;
 }
+
+
+
+.language-javascriptreact{
+  text-wrap: initial;
+}

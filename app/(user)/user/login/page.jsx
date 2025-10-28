@@ -16,6 +16,9 @@ const AuthLayout = () => {
     password: '',
 
   });
+
+
+  
   const [loading,setLoading]=useState(false)
 
 

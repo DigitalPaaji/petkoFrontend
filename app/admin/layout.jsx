@@ -29,6 +29,7 @@ import {
   FaBlog
 } from 'react-icons/fa';
 import { BiCategoryAlt } from "react-icons/bi";
+import { RiCoupon3Line } from "react-icons/ri";
 
 
 
@@ -57,7 +58,9 @@ const Layout = ({ children }) => {
 
     { id: 7, name: 'Analytics', icon: FiBarChart2, path: '/admin/analytics', color: 'text-indigo-500' },
     { id: 8, name: 'Messages', icon: FiMail, path: '/admin/messages', color: 'text-teal-500' },
-    { id: 9, name: 'Settings', icon: FiSettings, path: '/admin/settings', color: 'text-gray-500' },
+        { id: 9, name: 'Coupons', icon: RiCoupon3Line, path: '/admin/coupons', color: 'text-pink-500' },
+
+    { id: 10, name: 'Settings', icon: FiSettings, path: '/admin/settings', color: 'text-gray-500' },
   ];
 
   const petStats = [

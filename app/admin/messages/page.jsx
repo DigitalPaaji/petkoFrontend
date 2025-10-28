@@ -331,16 +331,7 @@ const handelReed =async(id,bool)=>{
                                     <p className="text-gray-300 whitespace-pre-wrap">{selectedMessage.message}</p>
                                 </div>
 
-                                {/* Product Info if available */}
-                                {selectedMessage.product_id && (
-                                    <div className="bg-gray-700 rounded-lg p-4">
-                                        <h4 className="text-white font-semibold mb-3">Related Product</h4>
-                                       <div className="text-gray-300 flex flex-col  gap-3 items-center"> <img src={  `${imgurl}/uploads/${selectedMessage.product_id?.banner_image}`} alt={selectedMessage.product_id?.title} className='w-28 h-28 rounded-2xl' />
-                                       {selectedMessage.product_id?.title}
-                                        </div>
-
-                                    </div>
-                                )}
+                             
                             </div>
 
                             <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-700">
