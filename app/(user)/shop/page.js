@@ -498,7 +498,8 @@ const handelminmax=(value)=>{
 
 
 const searchProfetch=async(val)=>{
- const response = await axios.get(`${baseurl}/product/search/${val}`);
+try {
+   const response = await axios.get(`${baseurl}/product/search/${val}`);
  const data = await response.data;
  if(data.success){
 setSearchData(data.products)
@@ -506,6 +507,13 @@ setSearchData(data.products)
  else{
   setSearchData([])
  }
+  
+} catch (error) {
+    setSearchData([])
+
+}
+
+
 }
 
 
@@ -563,7 +571,7 @@ return ()=>clearTimeout(setval)
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <input
-                  type="text"
+                  type="search"
                   placeholder="Search products..."
                   value={searchProduct}
                   onChange={(e) =>setSearchProduct(e.target.value) }
@@ -571,9 +579,9 @@ return ()=>clearTimeout(setval)
                 />{ searchProduct && searchdata?.length? 
 
 <div className="flex flex-col gap-2 absolute  top-full bg-white w-full shadow-2xl py-2">
-{searchdata.map((item)=>{
+{searchdata.map((item,index)=>{
   return(
-    <Link href={`${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50 ">
+    <Link key={index}  href={`/shop/${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50 ">
     {item.name}
     </Link>
 
@@ -596,13 +604,12 @@ return ()=>clearTimeout(setval)
               </label>
                {petcategory?.map((cat) => (
           <label
-            key={cat}
+            key={cat._id}
             className="flex items-center gap-2 text-sm text-gray-700 mb-1"
           >
             <input
               type="radio"
               name="pet"
-              // checked={filters.category.includes(cat)}
               onChange={() => handlePet(cat._id)}
               className="rounded border-gray-300 text-green-700 focus:ring-green-500"
             />
@@ -693,12 +700,29 @@ return ()=>clearTimeout(setval)
           <input
             type="text"
             placeholder="Search products..."
-            value={filters.search}
-            onChange={(e) =>
-              setFilters({ ...filters, search: e.target.value })
-            }
+           value={searchProduct}
+                  onChange={(e) =>setSearchProduct(e.target.value) }
             className="w-full pl-10 pr-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-gray-200"
           />
+
+      { searchProduct && searchdata?.length? 
+
+<div className="flex flex-col gap-2 absolute  top-full bg-white w-full shadow-2xl py-2">
+{searchdata.map((item,index)=>{
+  return(
+    <Link key={index}  href={`/shop/${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50 ">
+    {item.name}
+    </Link>
+
+
+
+  )
+})}
+
+</div>
+:""
+}
+          
         </div>
       </div>
 
@@ -709,7 +733,7 @@ return ()=>clearTimeout(setval)
         </label>
         {petcategory?.map((cat) => (
           <label
-            key={cat}
+            key={cat._id}
             className="flex items-center gap-2 text-sm text-gray-700 mb-1"
           >
             <input

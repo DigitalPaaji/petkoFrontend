@@ -23,8 +23,10 @@ import {
 import Link from "next/link";
 import { toast } from "react-toastify";
 import RichTextEditor from "@/app/admin/components/RichTextEditor";
+import { useRouter } from "next/navigation";
 
 const Page = ({ params: { slug } }) => {
+  const route = useRouter()
   const  [createPage,setCreatepage]= useState(1)
   const [tagInput, setTagInput] = useState("");
   const [images, setImages] = useState([]);
@@ -228,6 +230,8 @@ const Page = ({ params: { slug } }) => {
         toast.success("Product updated successfully!");
         
         setImagesToDelete([]);
+        route.push("/admin/products")
+      
       }
     } catch (error) {
       console.error("Update product error:", error);
