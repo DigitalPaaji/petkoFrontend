@@ -19,7 +19,7 @@ export default function Navbar() {
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
-    const handleScroll = () => setScrolled(window.scrollY > 120);
+    const handleScroll = () => setScrolled(window.scrollY > 100);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

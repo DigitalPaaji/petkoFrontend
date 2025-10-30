@@ -65,20 +65,20 @@ const ShopByPet = ({ categories = [] }) => {
   const displayCategories = categories.length > 0 ? categories : defaultCategories;
 
   return (
-    <section className="relative  py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
+    <section className="relative  py-16 px-4 md:px-12 xl:px-24 2xl:px-40">
 
 
 
 
       <div className="">
         {/* Section Heading */}
-        <div className="text-start mb-12 border-b border-[#6666664d] py-4 px-6 transition-colors duration-200 font-semibold text-xl lg:text-3xl ">
-            Shop By Pet
+        <div className="border-b border-[#6666664d] py-4 px-6 transition-colors duration-200 font-semibold text-[17px] lg:text-[22px] ">
+            Shop By Categories
           
         </div>
 
         {/* Categories Grid */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-12">
   {displayCategories.map((category) => (
     <div 
       key={category.id}
