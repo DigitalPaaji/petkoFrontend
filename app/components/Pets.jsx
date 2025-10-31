@@ -254,7 +254,7 @@ function PetCategories() {
       <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="flex items-center justify-center gap-4 md:gap-8 lg:gap-32 overflow-x-auto scrollbar-hide border-b border-gray-200 pb-4"
+          className="flex items-center justify-start gap-4 md:gap-8 lg:gap-32 overflow-x-auto scrollbar-hide border-b border-gray-200 pb-4"
         >
           {Object.keys(petCategories).map((key) => {
             const category = petCategories[key];
@@ -289,63 +289,35 @@ function PetCategories() {
         </div>
       </div>
 
-      {/* Active Category Description */}
-      <div className="mt-4 sm:mt-6 lg:mt-8 text-center">
-        <p className="text-gray-600 text-sm sm:text-base lg:text-lg xl:text-xl">
-          {petCategories[activeTab].description}
-        </p>
-      </div>
+
 
       {/* Products Swiper */}
-      <div className="mt-8 sm:mt-12 lg:mt-16">
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          slidesPerView={1.2}
-          spaceBetween={12}
-          breakpoints={{
-            400: { slidesPerView: 1.3 },
-            500: { slidesPerView: 1.8 },
-            640: { slidesPerView: 2.2 },
-            768: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 3.2 },
-            1280: { slidesPerView: 4 },
-            1536: { slidesPerView: 5 },
-          }}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          speed={1000}
-          loop={true}
-          grabCursor={true}
-          className="pet-products-swiper"
-        >
-          {productData[activeTab]?.map((product, index) => (
-            <SwiperSlide key={index}>
-              <div className="cursor-default group w-full overflow-hidden">
-                <div className=" w-full  overflow-hidden ">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="w-40 h-40 object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => {
-                      e.currentTarget.src = fallbackImages.product;
-                    }}
-                  />
-           
-                </div>
+<div className="mt-8 sm:mt-12 lg:mt-16">
+  <div className="flex items-center justify-start gap-4 md:gap-8 lg:gap-32 overflow-x-auto scrollbar-hide  px-4">
+    {productData[activeTab]?.map((product, index) => (
+      <div key={index} className="cursor-default group w-40 flex-shrink-0 overflow-hidden">
+        <div className="relative w-40 h-40 overflow-hidden ">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 640px) 160px, 160px"
+            onError={(e) => {
+              e.currentTarget.src = fallbackImages.product;
+            }}
+          />
+        </div>
 
-                <div className="p-3 sm:p-4">
-                  <h4 className="font-normal text-[#2ea2cc] group-hover:text-[#F48C7F] transition-colors text-sm sm:text-md text-center">
-                    {product.name}
-                  </h4>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="p-3 sm:p-4">
+          <h4 className="font-normal text-[#2ea2cc] group-hover:text-[#F48C7F] transition-colors text-sm sm:text-md text-center">
+            {product.name}
+          </h4>
+        </div>
       </div>
+    ))}
+  </div>
+</div>
 
       </div>
 
