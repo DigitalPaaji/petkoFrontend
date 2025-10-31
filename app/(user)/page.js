@@ -2,7 +2,7 @@ import Banner from "../components/Banner";
 import Banner2 from "../components/Banner2";
 import New from "../components/New";
 import Reviews from "../components/Reviews";
-
+import Pets from "../components/Pets"
 
 
 import BlogSection from "../components/Blogs";
@@ -15,6 +15,7 @@ export default function Home() {
       <Banner/>
       <Banner2/>
       <New/>
+      <Pets/>
       <Shop/>
       <RelatedProducts/>
       <Reviews/>
