@@ -265,7 +265,7 @@ else{
                             {blog.images ? (
                               <img
                                 className="h-10 w-10 rounded-lg object-cover"
-                                src={`${imgurl}/${blog.images[0]}`}
+                                src={`${imgurl}/uploads/${blog.images[0]}`}
                                 alt={blog.title}
                               />
                             ) : (

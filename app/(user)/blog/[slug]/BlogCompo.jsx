@@ -212,7 +212,7 @@ setnewTag(data.tags)
                 {myblog?.images?.map((img, i) => (
                   <div key={i} className="relative h-64 md:h-80 rounded-xl overflow-hidden">
                     <img 
-                      src={`${imgurl}/${img}`}
+                      src={`${imgurl}/uploads/${img}`}
                       alt={`${img}-image-${i + 1}`}
                       fill
                       className=" object-cover hover:scale-105 transition-transform duration-300"
@@ -338,7 +338,7 @@ setnewTag(data.tags)
                         <div className="flex-shrink-0">
                           <div className="relative w-20 h-16 rounded-lg overflow-hidden">
                             <img
-                              src={ `${imgurl}/${blog.images[0]}`}
+                              src={ `${imgurl}/uploads/${blog.images[0]}`}
                               alt={blog.title}
                               fill
                               className="object-cover group-hover:scale-110 transition-transform duration-300"

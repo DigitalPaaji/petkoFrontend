@@ -202,6 +202,15 @@ const handelMoveToWishlist= async(cartid,productid)=>{
 }
 
 
+const handelCheckout=()=>{
+localStorage.setItem("checkoutstatus",JSON.stringify({type:"cart",}))
+
+route.push("/checkout")
+
+
+}
+
+
 
 
 
@@ -368,12 +377,7 @@ const handelMoveToWishlist= async(cartid,productid)=>{
                 </div>
 
                 
-                {/* {discountPercent > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Discount ({appliedCoupon})</span>
-                    <span>- ${Math.floor((total * discountPercent) / 100)}</span>
-                  </div>
-                )} */}
+               
                 <div className="flex justify-between font-semibold text-base border-t pt-3">
                   <span>Subtotal</span>
                   <span>
@@ -386,12 +390,14 @@ const handelMoveToWishlist= async(cartid,productid)=>{
               </div>
 
               <div className="flex flex-col gap-4 mt-6">
-                <Link
-                  href={"/checkout"}
+                <button
+                  // href={"/checkout"}
+                  onClick={()=>{handelCheckout()}}
+
                   className="flex-1 bg-[#F59383] text-white font-semibold py-2 text-center block hover:bg-[#F59383] transition"
                 >
                   Place Order
-                </Link>
+                </button>
 
                 <Link
                   href={"/"}

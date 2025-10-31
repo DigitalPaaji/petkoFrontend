@@ -108,6 +108,23 @@ const ProductCompo = ({ productData }) => {
     fetchwishlst();
   }, []);
 
+
+
+const handelbuy = ()=>{
+
+
+console.log(quantity,productData._id)
+
+localStorage.setItem("checkoutstatus",JSON.stringify({quantity,product:productData._id,type:"buy"}))
+router.push("/checkout")
+
+
+}
+
+
+
+
+
   return (
     <>
       <div className="min-h-screen  px-4 md:px-12 xl:px-24 2xl:px-40">
@@ -227,7 +244,7 @@ const ProductCompo = ({ productData }) => {
                 >
                   Add to Cart
                 </button>
-                <button className="bg-[#F48C7F] font-semibold text-white cursor-pointer px-6 py-3  transition duration-200">
+                <button onClick={()=>handelbuy()} className="bg-[#F48C7F] font-semibold text-white cursor-pointer px-6 py-3  transition duration-200">
                   Buy Now
                 </button>
               </div>

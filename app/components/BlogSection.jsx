@@ -73,7 +73,7 @@ const BlogSection = () => {
           <div className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
             <div className="relative overflow-hidden">
               <img
-                src={`${imgurl}/${blog.images[0]}`}
+                src={`${imgurl}/uploads/${blog.images[0]}`}
                 alt={blog.title}
                 className="w-full h-[15rem] object-cover group-hover:scale-110 transition-transform duration-500"
               />
