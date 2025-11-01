@@ -6,21 +6,35 @@ import React, { useEffect, useState } from 'react'
 axios.defaults.withCredentials= true;
 
 
-const Showproduct = ({buyType}) => {
+const Showproduct = ({buyType,setcouponCode,setorderItems,processOrder}) => {
     const [product,setProduct] =useState()
  
    const [couponval,setCouponval]=useState("")
     const [couponDiscountPrice,setCouponDiscountPrice]=useState(0)
    const [couponDetail,setCouponDetail]=useState()
    const [couponError,setCouponError]=useState()
+     const [charges, setCharges] = useState();
+   const [ deleveryCharge,setDeleveryCharge]=useState()
+const [taxCharge,setTacCharge]=useState()
+const [maxchagevall,setMAxchagevall]=useState()
+
 
 const fetchProduct= async()=>{
     const response = await axios.get(`${baseurl}/checkout/getbuyproduct/${buyType?.product}`)
     const data = await response.data;
     if(data.success){
       setProduct(data.product)  
+      setorderItems([{
+product:data.product._id,
+name:data.product.name,
+image:data.product.images[0],
+price:data.product.price,
+quantity:buyType.quantity
+      }])
     }
 }
+
+  
 
 
 
@@ -36,6 +50,7 @@ if(data.success){
 
     setCouponDiscountPrice(data.discountAmount)
     setCouponDetail(data.coupon)
+    setcouponCode(couponval)
 }
 
 
@@ -58,7 +73,32 @@ else{
 
 
 
+ const fetchChargies = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/charges`);
+      const data = await response.data;
+      if (data.success) {
+        console.log(data.charges);
+data.charges.forEach((item,index)=>{
+if(item.chargetype =="shipping"){
+  setDeleveryCharge(item?.chargeamount)
+   item?.maxvalue && setMAxchagevall(item.maxvalue)
 
+}
+else if(item.chargetype =="tax"){
+setTacCharge(item?.chargeamount)
+}
+
+
+})
+
+      } else {
+        setCharges([]);
+      }
+    } catch (error) {
+      setCharges([]);
+    }
+  };
 
 
 
@@ -67,7 +107,8 @@ else{
 
 
 useEffect(()=>{
- fetchProduct()   
+ fetchProduct() 
+ fetchChargies()  
 },[])
 
 
@@ -186,15 +227,36 @@ useEffect(()=>{
 
 <div className='flex justify-between border-b py-2 border-gray-600/40 border-dashed'>
 <b>Discount:</b>
-<p>${ (  product.comparePrice-product.price) * buyType.quantity}</p>
+<p> -${ (  product.comparePrice-product.price) * buyType.quantity}</p>
+
+
+</div>
+
+<div className='flex justify-between border-b py-2 border-gray-600/40 border-dashed'>
+<b>Shipping:</b>
+<p>${  (product.price * buyType.quantity) < maxchagevall ? deleveryCharge : 0  }</p>
+
+
 
 
 </div>
 
 
+
+<div className='flex justify-between border-b py-2 border-gray-600/40 border-dashed'>
+<b>Tax:</b>
+<p>  {taxCharge ?  `${taxCharge}% ($${(product.price* buyType.quantity *taxCharge)/100})` :"$0" } </p>
+
+
+
+
+</div>
+
+
+
 <div className='flex justify-between border-b py-2 border-gray-600/40 border-dashed'>
 <b>Subtotal:</b>
-<p>${ product.price* buyType.quantity}</p>
+<p>${ product.price* buyType.quantity  +  ((product.price * buyType.quantity) < maxchagevall ? deleveryCharge : 0 ) + (taxCharge ? ((product.price* buyType.quantity *taxCharge)/100) :0) }</p>
 
 
 </div>
@@ -242,7 +304,7 @@ useEffect(()=>{
 
 <div className='flex justify-center my-3 px-5'>
 
-<button className='px-5 py-1 font-bold text-white bg-[#e88573] rounded-xl cursor-pointer'>Pay  ${ (product.price* buyType.quantity) - couponDiscountPrice  }</button>
+<button onClick={processOrder} className='px-5 py-1 font-bold text-white bg-[#e88573] rounded-xl cursor-pointer'>Pay  ${ (product.price* buyType.quantity) - couponDiscountPrice + ((product.price * buyType.quantity) < maxchagevall ? deleveryCharge : 0 )+ (taxCharge ? ((product.price* buyType.quantity *taxCharge)/100) :0) }</button>
 </div>
 
   </div>

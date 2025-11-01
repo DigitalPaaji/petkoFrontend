@@ -26,7 +26,8 @@ import {
   FaFish,
   FaShoppingCart,
   FaRegSmile,
-  FaBlog
+  FaBlog,
+  FaRegImages
 } from 'react-icons/fa';
 import { BiCategoryAlt } from "react-icons/bi";
 import { RiCoupon3Line } from "react-icons/ri";
@@ -46,9 +47,11 @@ const Layout = ({ children }) => {
   const router = useRouter()
 
   const menuItems = [
-    // { id: 1, name: 'Dashboard', icon: FiHome, path: '/admin', color: 'text-blue-500' },
+        { id: 2.1, name: 'Banners', icon: FaRegImages, path: '/admin/banner', color: 'text-violet-500' },
     { id: 2, name: 'Customers', icon: FiUsers, path: '/admin/customers', color: 'text-green-500' },
+
     { id: 3, name: 'Pets', icon: FaPaw, path: '/admin/pets', color: 'text-yellow-500' },
+    
         { id: 3.1, name: 'Product Category', icon: BiCategoryAlt, path: '/admin/product-cat', color: 'text-yellow-500' },
 
     { id: 4, name: 'Products', icon: FiShoppingBag, path: '/admin/products', color: 'text-purple-500' },
@@ -297,7 +300,7 @@ transition={Flip}
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className=" flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
         <header className="bg-white/80 backdrop-blur-sm shadow-sm z-10 border-b border-blue-100">
           <div className="flex items-center justify-between px-6 py-4">

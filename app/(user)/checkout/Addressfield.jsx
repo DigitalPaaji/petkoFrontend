@@ -17,7 +17,7 @@ import { toast } from 'react-toastify'
 
 axios.defaults.withCredentials = true
 
-const Addressfield = () => {
+const Addressfield = ({setAddressId}) => {
   const [showForm, setShowForm] = useState(false)
   const [addresses, setAddresses] = useState([])
   const [editingAddress, setEditingAddress] = useState(null)
@@ -30,6 +30,12 @@ const Addressfield = () => {
       const data = await response.data
       if (data.success) {
         setAddresses(data.data)
+data.data.forEach((item)=> {
+  if(item.default){
+    setAddressId(item._id)
+  }
+})
+
       }
     } catch (error) {
       console.error("Error fetching addresses:", error)

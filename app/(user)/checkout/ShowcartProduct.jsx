@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 axios.defaults.withCredentials = true;
 
 
-const ShowcartProduct = () => {
+const ShowcartProduct = ({setcouponCode}) => {
     const [allproductData,setAllproductData]=useState()
     const [totalPrice,setTotalPrice]=useState(0)
     const [discountPrice,setDiscountPrice]=useState(0)
@@ -15,6 +15,10 @@ const ShowcartProduct = () => {
    const [couponDetail,setCouponDetail]=useState()
    const [couponError,setCouponError]=useState()
    const [oldprice,setAllprice]=useState()
+       const [charges, setCharges] = useState();
+      const [ deleveryCharge,setDeleveryCharge]=useState()
+   const [taxCharge,setTacCharge]=useState()
+   const [maxchagevall,setMAxchagevall]=useState()
 
 
 
@@ -48,6 +52,7 @@ if(data.success){
 
     setCouponDiscountPrice(data.discountAmount)
     setCouponDetail(data.coupon)
+    setcouponCode(couponval)
 }
 
 
@@ -72,9 +77,39 @@ else{
 
 
 
+ const fetchChargies = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/charges`);
+      const data = await response.data;
+      if (data.success) {
+        console.log(data.charges);
+data.charges.forEach((item,index)=>{
+if(item.chargetype =="shipping"){
+  setDeleveryCharge(item?.chargeamount)
+   item?.maxvalue && setMAxchagevall(item.maxvalue)
+
+}
+else if(item.chargetype =="tax"){
+setTacCharge(item?.chargeamount)
+}
+
+
+})
+
+      } else {
+        setCharges([]);
+      }
+    } catch (error) {
+      setCharges([]);
+    }
+  };
+
+
+
 
 useEffect(()=>{
     fetchproduct()
+    fetchChargies()
 },[])
 
 
@@ -89,7 +124,7 @@ useEffect(()=>{
          <> 
 
 <div
-      
+      key={index}
       className="bg-white mx-5 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300  p-3 flex flex-col gap-4"
     >
       {/* Product Row */}
@@ -208,8 +243,20 @@ useEffect(()=>{
 
 
 <div className='flex justify-between border-b py-2 border-gray-600/40 border-dashed'>
+<b>Shipping:</b>
+<p>${ maxchagevall? totalPrice < maxchagevall ? deleveryCharge : 0 : deleveryCharge }</p>
+</div>
+<div className='flex justify-between border-b py-2 border-gray-600/40 border-dashed'>
+<b>Tax:</b>
+<p>{taxCharge ? `${taxCharge}%  ($${(totalPrice *taxCharge)/100}) `:`$0` } </p>
+</div>
+
+
+
+<div className='flex justify-between border-b py-2 border-gray-600/40 border-dashed'>
 <b>Subtotal:</b>
-<p>${ totalPrice}</p>
+<p>${ totalPrice 
+  + ( maxchagevall ? totalPrice < maxchagevall ? deleveryCharge : 0:deleveryCharge) +  (taxCharge?  (totalPrice *taxCharge)/100:0)}</p>
 
 
 </div>
@@ -257,7 +304,7 @@ useEffect(()=>{
 
 <div className='flex justify-center my-3 px-5'>
 
-<button className='px-5 py-1 font-bold text-white bg-[#e88573] rounded-xl cursor-pointer'>Pay  ${ totalPrice - couponDiscountPrice  }</button>
+<button className='px-5 py-1 font-bold text-white bg-[#e88573] rounded-xl cursor-pointer'>Pay  ${ totalPrice - couponDiscountPrice  + ( maxchagevall ? totalPrice < maxchagevall ? deleveryCharge : 0:deleveryCharge) +  (taxCharge?  (totalPrice *taxCharge)/100:0)  }</button>
 </div>
 
   </div>

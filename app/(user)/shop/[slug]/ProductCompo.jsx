@@ -19,6 +19,8 @@ const ProductCompo = ({ productData }) => {
   const [zoom, setZoom] = useState(false);
   const [position, setPosition] = useState({ x: 50, y: 50 });
   const router = useRouter();
+  const [charges, setCharges] = useState();
+
 
   const reviews = [
     {
@@ -55,8 +57,6 @@ const ProductCompo = ({ productData }) => {
   };
 
   const addtocart = async (id, price) => {
-    console.log(id);
-
     try {
       const response = await axios.post(
         `${baseurl}/cart/addtocart`,
@@ -104,26 +104,34 @@ const ProductCompo = ({ productData }) => {
     }
   };
 
+  const fetchChargies = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/charges`);
+      const data = await response.data;
+      if (data.success) {
+        setCharges(data.charges);
+      } else {
+        setCharges([]);
+      }
+    } catch (error) {
+      setCharges([]);
+    }
+  };
+
+  
+
   useEffect(() => {
     fetchwishlst();
+    fetchChargies();
   }, []);
 
-
-
-const handelbuy = ()=>{
-
-
-console.log(quantity,productData._id)
-
-localStorage.setItem("checkoutstatus",JSON.stringify({quantity,product:productData._id,type:"buy"}))
-router.push("/checkout")
-
-
-}
-
-
-
-
+  const handelbuy = () => {
+    localStorage.setItem(
+      "checkoutstatus",
+      JSON.stringify({ quantity, product: productData._id, type: "buy" })
+    );
+    router.push("/checkout");
+  };
 
   return (
     <>
@@ -220,6 +228,25 @@ router.push("/checkout")
                 {productData?.shortDescription}{" "}
               </p>
 
+              <div className="border-t border-gray-200 pt-4 space-y-1 text-sm text-gray-600">
+                {charges &&
+                  charges.length > 0 &&
+                  charges.map((item, index) => {
+                    return (
+                      <>
+                        <div className="text-rose-600">
+                          <b>{item.chargetype}: </b>  
+                          {item.chargetype == "shipping" && "$"}
+                          {item?.chargeamount}
+                          {item.chargetype == "tax" && "%"} 
+    {item?.maxvalue &&  <p className="text-green-600">free {item.chargetype} upto {item?.maxvalue}  </p>    }
+
+                        </div>
+                      </>
+                    );
+                  })}
+              </div>
+
               <div className="flex items-center justify-start flex-wrap gap-2 lg:gap-4 my-6">
                 <div className="flex items-center border border-[#6666664d]">
                   <button
@@ -244,7 +271,10 @@ router.push("/checkout")
                 >
                   Add to Cart
                 </button>
-                <button onClick={()=>handelbuy()} className="bg-[#F48C7F] font-semibold text-white cursor-pointer px-6 py-3  transition duration-200">
+                <button
+                  onClick={() => handelbuy()}
+                  className="bg-[#F48C7F] font-semibold text-white cursor-pointer px-6 py-3  transition duration-200"
+                >
                   Buy Now
                 </button>
               </div>

@@ -67,6 +67,16 @@ const Page = () => {
               <h1 className="text-3xl font-bold text-gray-900">Products</h1>
               <p className="text-gray-600 mt-2">Manage your product inventory and listings</p>
             </div>
+            <div className='flex gap-3'>
+
+               <Link
+              href="/admin/products/charges"
+              className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-600 hover:from-red-700 hover:to-red-700 text-white px-2 py-3 rounded-xl transition-all duration-200 shadow-lg font-medium"
+            >
+              <FiPlus className="" />
+             Charges
+            </Link>
+           
             <Link
               href="/admin/products/create"
               className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all duration-200 shadow-lg font-medium"
@@ -74,6 +84,7 @@ const Page = () => {
               <FiPlus className="w-5 h-5" />
               Create Product
             </Link>
+             </div>
           </div>
         </div>
 
