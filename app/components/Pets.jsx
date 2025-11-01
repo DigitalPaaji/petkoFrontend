@@ -211,114 +211,154 @@ const fallbackImages = {
 
 function PetCategories() {
   const [activeTab, setActiveTab] = useState("dog");
-  const scrollContainerRef = useRef(null);
+  const petsScrollRef = useRef(null);
+  const productsScrollRef = useRef(null);
 
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+  const scrollPetsLeft = () => {
+    if (petsScrollRef.current) {
+      petsScrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
     }
   };
 
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+  const scrollPetsRight = () => {
+    if (petsScrollRef.current) {
+      petsScrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollProductsLeft = () => {
+    if (productsScrollRef.current) {
+      productsScrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollProductsRight = () => {
+    if (productsScrollRef.current) {
+      productsScrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
     }
   };
 
   return (
-    <div className="mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16 2xl:mx-40 my-12 lg:my-16 ">
-      {/* Header with Title and Scroll Controls */}
-      <div className="flex items-start sm:items-center justify-between mb-4 gap-4 sm:gap-0">
-        <h2 className="py-4 px-6 transition-colors duration-200 font-semibold text-[17px] lg:text-[22px] ">
+    <div className="py-16 px-4 md:px-12 xl:px-24 2xl:px-40">
+      {/* Header with Title */}
+      <div className="mb-8">
+        {/* <h2 className="font-semibold text-[17px] lg:text-[22px] text-center">
+          Shop by Pet Category
+        </h2> */}
+      </div>
+
+      <div className="bg-white border border-gray-100 p-6">
+        {/* Pet Categories Section */}
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-8">
+                   <h2 className="font-semibold text-[17px] lg:text-[22px] text-center">
           Shop by Pet Category
         </h2>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={scrollLeft}
-            className="p-2 sm:p-3 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-          </button>
-          <button
-            onClick={scrollRight}
-            className="p-2 sm:p-3 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
-            aria-label="Scroll right"
-          >
-            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-          </button>
-        </div>
-      </div>
-<div className="px-6 py-12 lg:py-16 bg-white">
-      {/* Pet Category Tabs with Horizontal Scroll */}
-      <div className="relative">
-        <div
-          ref={scrollContainerRef}
-          className="flex items-center justify-start gap-4 md:gap-8 lg:gap-32 overflow-x-auto scrollbar-hide border-b border-gray-200 pb-4"
-        >
-          {Object.keys(petCategories).map((key) => {
-            const category = petCategories[key];
-            return (
+            <div className="flex items-center gap-2">
               <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                className={`flex flex-col border-b-2  items-center justify-center min-w-[70px] sm:min-w-[80px] lg:min-w-[100px] xl:min-w-[120px] cursor-pointer transition-all duration-300 flex-shrink-0 pb-2 ${
-                  activeTab === key
-                    ? "opacity-100 scale-105  border-[#e46959]"
-                    : "border-transparent"
-                }`}
+                onClick={scrollPetsLeft}
+                className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+                aria-label="Scroll pet categories left"
               >
-                <div className="relative w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24">
+                <ChevronLeft className="w-4 h-4 text-gray-600" />
+              </button>
+              <button
+                onClick={scrollPetsRight}
+                className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+                aria-label="Scroll pet categories right"
+              >
+                <ChevronRight className="w-4 h-4 text-gray-600" />
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={petsScrollRef}
+            className="flex items-center justify-between gap-6 overflow-x-auto scrollbar-hide pb-2"
+          >
+            {Object.keys(petCategories).map((key) => {
+              const category = petCategories[key];
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveTab(key)}
+                  className={`flex flex-col items-center justify-center min-w-[100px] cursor-pointer transition-all duration-300 flex-shrink-0 p-3 border-b ${
+                    activeTab === key
+                      ? "border-[#e46959] "
+                      : "border-transparent hover:border-gray-200"
+                  }`}
+                >
+                  <div className="relative w-16 lg:w-24 h-16 lg:h-24 mb-2">
+                    <Image
+                      src={category.image}
+                      alt={category.name}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                      onError={(e) => {
+                        e.currentTarget.src = fallbackImages.pet;
+                      }}
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 text-center">
+                    {category.name}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Products Section */}
+        <div className="p-6">
+          <div className="flex items-center justify-end mb-4">
+           
+            <div className="flex items-center gap-2">
+              <button
+                onClick={scrollProductsLeft}
+                className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+                aria-label="Scroll products left"
+              >
+                <ChevronLeft className="w-4 h-4 text-gray-600" />
+              </button>
+              <button
+                onClick={scrollProductsRight}
+                className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+                aria-label="Scroll products right"
+              >
+                <ChevronRight className="w-4 h-4 text-gray-600" />
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={productsScrollRef}
+            className="flex items-center gap-8 justify-between overflow-x-auto scrollbar-hide pb-2"
+          >
+            {productData[activeTab]?.map((product, index) => (
+              <div key={index} className="cursor-default group w-48 flex-shrink-0">
+                <div className="relative w-36 h-36 overflow-hidden rounded-lg mb-3">
                   <Image
-                    src={category.image}
-                    alt={category.name}
+                    src={product.image}
+                    alt={product.name}
                     fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 48px, (max-width: 768px) 64px, (max-width: 1024px) 80px, 96px"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="192px"
                     onError={(e) => {
-                      e.currentTarget.src = fallbackImages.pet;
+                      e.currentTarget.src = fallbackImages.product;
                     }}
                   />
                 </div>
-                <span className="text-xs sm:text-sm lg:text-base mt-2 sm:mt-3 font-medium text-gray-700 text-center">
-                  {category.name}
-                </span>
-              </button>
-            );       
-          })}
+
+                <div className="text-center">
+                  <h4 className="font-normal text-[#2ea2cc] group-hover:text-[#F48C7F] transition-colors text-sm">
+                    {product.name}
+                  </h4>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-
-
-
-      {/* Products Swiper */}
-<div className="mt-8 sm:mt-12 lg:mt-16">
-  <div className="flex items-center justify-start gap-4 md:gap-8 lg:gap-32 overflow-x-auto scrollbar-hide  px-4">
-    {productData[activeTab]?.map((product, index) => (
-      <div key={index} className="cursor-default group w-40 flex-shrink-0 overflow-hidden">
-        <div className="relative w-40 h-40 overflow-hidden ">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 640px) 160px, 160px"
-            onError={(e) => {
-              e.currentTarget.src = fallbackImages.product;
-            }}
-          />
-        </div>
-
-        <div className="p-3 sm:p-4">
-          <h4 className="font-normal text-[#2ea2cc] group-hover:text-[#F48C7F] transition-colors text-sm sm:text-md text-center">
-            {product.name}
-          </h4>
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-
       </div>
 
       <style jsx>{`

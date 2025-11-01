@@ -82,9 +82,9 @@ const ReviewsSection = () => {
   };
 
   return (
-    <section className="py-6 lg:py-16 px-4 md:px-12 xl:px-24 2xl:px-40 bg-gradient-to-b from-transparent to-[#fff5e1b9]">
+    <section className="py-16 px-4 md:px-12 xl:px-24 2xl:px-40 bg-gradient-to-b from-transparent to-[#fff5e1b9]">
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-16">
+      <div className="text-center mb-16">
         <div className="flex items-center justify-center mb-6">
           <div className="w-16 h-0.5 bg-stone-300 mr-4"></div>
           <div className="flex flex-col items-center">

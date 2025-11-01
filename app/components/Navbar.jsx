@@ -27,46 +27,49 @@ export default function Navbar() {
 const navLinks = [
   { name: "Home", href: "/" },
 
-  // SHOP DROPDOWN (will be fetched dynamically)
+  // SHOP DROPDOWN (static for now)
   {
     name: "Shop",
     dropdown: [
       {
         name: "Categories",
-        // These will come dynamically from backend (e.g., Dog, Cat, Bird, etc.)
         items: [
-          // Example placeholders:
-          "Dogs",
-          "Cats",
-          "Birds",
-          "Fish",
+          { name: "Dogs", href: "/shop/dogs" },
+          { name: "Cats", href: "/shop/cats" },
+          { name: "Birds", href: "/shop/birds" },
+          { name: "Fish", href: "/shop/fish" },
         ],
       },
     ],
   },
 
-  // PAGES DROPDOWN (static informational pages)
+  // PAGES DROPDOWN (matches footer sections)
   {
     name: "Pages",
     dropdown: [
       {
-        name: "Information",
+        name: "Useful Links",
         items: [
-          "Delivery Information",
-          "Return & Refund Policy",
-          "Privacy Policy",
-          "Terms & Conditions",
+          { name: "Delivery Information", href: "/delivery-information" },
+          { name: "Return & Refund Policy", href: "/refund-policy" },
+          { name: "Privacy Policy", href: "/privacy-policy" },
+          { name: "Terms & Conditions", href: "/terms-and-conditions" },
         ],
       },
       {
-        name: "Support",
-        items: ["Contact Us", "FAQ", "About Us"],
+        name: "Customer Service",
+        items: [
+          { name: "Contact Us", href: "/contact" },
+          { name: "FAQ", href: "/faq" },
+          { name: "About Us", href: "/about" },
+        ],
       },
     ],
   },
 
   { name: "Blog", href: "/blog" },
 ];
+
 
 
   return (
@@ -88,54 +91,68 @@ const navLinks = [
             </Link>
 
 
- <div className="hidden lg:flex lg:space-x-8 lg:nav-links">
-              {navLinks.map((link, index) => (
-                <div
-                  key={link.name}
-                  className="relative group"
-                  onMouseEnter={() => setActiveDropdown(index)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
-                  <Link
-                    href={link.href || "#"}
-                    className="font-medium py-4 text-[#666] hover:text-[#F48C7F] flex items-center gap-1 relative"
-                  >
-                    {link.name}
-                    {link.dropdown && (
-                      <RiArrowDropDownLine className="text-2xl" />
-                    )}
-                  </Link>
+<div className="hidden lg:flex lg:space-x-8 nav-links">
+  {navLinks.map((link, index) => (
+    <div
+      key={link.name}
+      className="relative group"
+      onMouseEnter={() => setActiveDropdown(index)}
+      onMouseLeave={() => setActiveDropdown(null)}
+    >
+      <Link
+        href={link.href || "#"}
+        className="font-semibold py-4 text-[#666] hover:text-[#F48C7F] flex items-center gap-1 relative
+                   transition-all duration-300 ease-in-out
+                   border-t-2 border-transparent hover:border-[#F48C7F]
+                   before:content-[''] before:absolute before:top-[-1px] before:left-0 
+                   before:w-full before:h-px before:bg-white before:opacity-0 
+                   before:transition-opacity before:duration-300 before:ease-in-out
+                   hover:before:opacity-100"
+      >
+        {link.name}
+        {link.dropdown && <RiArrowDropDownLine className="text-2xl" />}
+      </Link>
 
-          {/* Dropdown Menu */}
-{link.dropdown && activeDropdown === index && (
-  <div className="dropdown-menu">
-    <div className="dropdown-arrow"></div>
+      {/* Dropdown Menu */}
+      {link.dropdown && activeDropdown === index && (
+        <div
+          className="absolute left-0 w-60 bg-white border border-gray-200 
+                     py-4 px-4 shadow-xl z-50 dropdown-menu"
+        >
+          <div
+            className="absolute top-[-8px] left-5 w-0 h-0 
+                       border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent 
+                       border-b-[8px] border-b-white dropdown-arrow"
+          ></div>
 
-    {link.dropdown.map((section) => (
-      <div key={section.name} className="dropdown-section">
-        <h4 className="font-semibold text-[#333] mb-2 ">
-          {section.name}
-        </h4>
-        <ul>
-          {section.items.map((item) => (
-            <li key={item}>
-              <Link
-                href="#"
-                className="block py-1 text-[#555] hover:text-[#F48C7F] "
-              >
-                {item}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
-  </div>
-)}
-
-                </div>
-              ))}
+          {link.dropdown.map((section, sectionIndex) => (
+            <div
+              key={section.name}
+              className={sectionIndex > 0 ? "mt-4 dropdown-section" : "dropdown-section"}
+            >
+              <h4 className="font-semibold text-[#333] mb-2">
+                {section.name}
+              </h4>
+              <ul>
+                {section.items.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="block py-1 text-[#555] hover:text-[#F48C7F] transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+          ))}
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
 
             
             <div className="flex items-center gap-4">
