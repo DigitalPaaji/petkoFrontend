@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { HiOutlineShoppingBag } from "react-icons/hi";
@@ -8,200 +8,171 @@ import { IoEyeOutline } from "react-icons/io5";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useSelector } from "react-redux";
+import { baseurl, imgurl } from "../admin/components/apis";
+import axios from "axios";
 
 // Simplified JSON data with product images and names only
-const productData = {
-  dog: [
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Premium Dog Food"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Chew Toys"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Leather Collar"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Comfort Bed"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Organic Shampoo"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Training Leash"
-    }
-  ],
-  cat: [
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Dry Cat Food"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Interactive Toy"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Scratching Post"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Cat Tree House"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Clumping Litter"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Travel Carrier"
-    }
-  ],
-  rabbit: [
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Hay Pellets"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Chew Toys"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Soft Bed"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Spacious Cage"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Outdoor Hutch"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Healthy Treats"
-    }
-  ],
-  reptile: [
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Live Insects"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Heat Lamp"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Glass Terrarium"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Desert Sand"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Rock Hideout"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Water Bowl"
-    }
-  ],
-  bird: [
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Seed Mix"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Swing Toy"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Large Cage"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Natural Perch"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Bath House"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Auto Feeder"
-    }
-  ],
-  fish: [
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Flake Food"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Aquarium Decor"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Filter Pump"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Water Medicine"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Glass Tank"
-    },
-    {
-      image: "/Images/frontend/auth.webp",
-      name: "Water Heater"
-    }
-  ]
-};
+// const productData = {
+//   dog: [
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Premium Dog Food"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Chew Toys"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Leather Collar"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Comfort Bed"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Organic Shampoo"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Training Leash"
+//     }
+//   ],
+//   cat: [
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Dry Cat Food"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Interactive Toy"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Scratching Post"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Cat Tree House"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Clumping Litter"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Travel Carrier"
+//     }
+//   ],
+//   rabbit: [
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Hay Pellets"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Chew Toys"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Soft Bed"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Spacious Cage"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Outdoor Hutch"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Healthy Treats"
+//     }
+//   ],
+//   reptile: [
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Live Insects"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Heat Lamp"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Glass Terrarium"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Desert Sand"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Rock Hideout"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Water Bowl"
+//     }
+//   ],
+//   bird: [
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Seed Mix"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Swing Toy"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Large Cage"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Natural Perch"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Bath House"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Auto Feeder"
+//     }
+//   ],
+//   fish: [
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Flake Food"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Aquarium Decor"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Filter Pump"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Water Medicine"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Glass Tank"
+//     },
+//     {
+//       image: "/Images/frontend/auth.webp",
+//       name: "Water Heater"
+//     }
+//   ]
+// };
 
-// Pet categories data with cat.png for all pets
-const petCategories = {
-  dog: {
-    name: "Dog",
-    image: "/Images/frontend/cat.png",
-    description: "Everything your dog loves — from food to toys, collars, and comfy beds."
-  },
-  cat: {
-    name: "Cat",
-    image: "/Images/frontend/cat.png",
-    description: "For your furry friend — find the best food, toys, and accessories."
-  },
-  rabbit: {
-    name: "Rabbit",
-    image: "/Images/frontend/cat.png",
-    description: "Soft, adorable, and happy! Treat your rabbit with the best care."
-  },
-  reptile: {
-    name: "Reptile",
-    image: "/Images/frontend/cat.png",
-    description: "Terrarium essentials and healthy meals for your cold-blooded buddies."
-  },
-  bird: {
-    name: "Bird",
-    image: "/Images/frontend/cat.png",
-    description: "From cages to nutritious seeds — everything for your chirpy friends."
-  },
-  fish: {
-    name: "Fish",
-    image: "/Images/frontend/cat.png",
-    description: "Decorate your aquarium and keep your fish healthy and happy."
-  }
-};
+
 
 // Fallback images
 const fallbackImages = {
@@ -213,6 +184,59 @@ function PetCategories() {
   const [activeTab, setActiveTab] = useState("dog");
   const petsScrollRef = useRef(null);
   const productsScrollRef = useRef(null);
+const pets = useSelector((state)=>state.petslice)
+const [petcat,setPatcat]=useState([])
+const [getProductType,setProductType]=useState()
+const [productData,setProductData]=useState()
+
+
+
+
+
+
+
+const fetchProductcat = async(id)=>{
+try {
+  const response = await axios.get(`${baseurl}/productcat/petcat/${id}`);
+  const data = await response.data;
+  if(data.success){
+    setProductData(data.data)
+  }
+  else{
+    setProductData(null)
+  }
+
+
+} catch (error) {
+      setProductData(null)
+
+}
+}
+
+useEffect(()=>{
+if(getProductType){
+
+fetchProductcat(getProductType)
+}
+},[getProductType])
+
+
+
+useEffect(()=>{
+
+
+  if(pets?.info || pets?.info?.success){
+    setPatcat(pets?.info?.petCategory)
+    setProductType(pets?.info?.petCategory[0]._id)
+  }
+},[pets])
+
+
+
+
+
+
+
 
   const scrollPetsLeft = () => {
     if (petsScrollRef.current) {
@@ -276,22 +300,22 @@ function PetCategories() {
             ref={petsScrollRef}
             className="flex items-center justify-between gap-6 overflow-x-auto scrollbar-hide pb-2"
           >
-            {Object.keys(petCategories).map((key) => {
-              const category = petCategories[key];
+            { petcat.length >0 &&   petcat?.map((item,index) => {
+              
               return (
                 <button
-                  key={key}
-                  onClick={() => setActiveTab(key)}
+                  key={index}
+                  onClick={() => setProductType(item._id)}
                   className={`flex flex-col items-center justify-center min-w-[100px] cursor-pointer transition-all duration-300 flex-shrink-0 p-3 border-b ${
-                    activeTab === key
+                    getProductType === item._id
                       ? "border-[#e46959] "
                       : "border-transparent hover:border-gray-200"
                   }`}
                 >
                   <div className="relative w-16 lg:w-24 h-16 lg:h-24 mb-2">
-                    <Image
-                      src={category.image}
-                      alt={category.name}
+                    <img
+                      src={`${imgurl}/uploads/${item.img}`}
+                      alt={item.type}
                       fill
                       className="object-cover"
                       sizes="64px"
@@ -301,7 +325,7 @@ function PetCategories() {
                     />
                   </div>
                   <span className="text-sm font-medium text-gray-700 text-center">
-                    {category.name}
+                    {item.type}
                   </span>
                 </button>
               );
@@ -333,14 +357,15 @@ function PetCategories() {
 
           <div
             ref={productsScrollRef}
-            className="flex items-center gap-8 justify-between overflow-x-auto scrollbar-hide pb-2"
+            className="flex items-center gap-8 overflow-x-auto  py-2 scrollbar-hide pb-2"
           >
-            {productData[activeTab]?.map((product, index) => (
-              <div key={index} className="cursor-default group w-48 flex-shrink-0">
-                <div className="relative w-36 h-36 overflow-hidden rounded-lg mb-3">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
+
+            {productData?.map((product, index) => (
+              <div key={index} className="cursor-default group w-48 flex-shrink-0 text-center  flex flex-col items-center">
+                <div className="relative w-36 h-36  rounded-lg mb-3">
+                  <img
+                    src={`${imgurl}/uploads/${product.img}`}
+                    alt={product?.product_name}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="192px"
@@ -350,9 +375,9 @@ function PetCategories() {
                   />
                 </div>
 
-                <div className="text-center">
+                <div className="text-center ">
                   <h4 className="font-normal text-[#2ea2cc] group-hover:text-[#F48C7F] transition-colors text-sm">
-                    {product.name}
+                    {product?.product_name}
                   </h4>
                 </div>
               </div>

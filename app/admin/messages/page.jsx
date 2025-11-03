@@ -53,7 +53,6 @@ const MessagesPage = () => {
 
     const deleteMessage = async (messageId) => {
 
-// console.log(messageId)
 
         if (window.confirm('Are you sure you want to delete this message?')) {
             try {

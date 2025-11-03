@@ -49,13 +49,11 @@ toast.error(data.message)
 
   const handleEdit = (category) => {
     // Implement edit functionality
-    console.log('Edit category:', category);
     alert(`Edit functionality for ${category.type} would go here!`);
   };
 
   const handleView = (category) => {
-    // Implement view functionality
-    console.log('View category:', category);
+    
     alert(`Viewing details for ${category.type}`);
   };
 
@@ -210,7 +208,7 @@ toast.error(data.message)
                         {cat.img ? (
                           <div className="relative group/image">
                             <img
-                              src={`${imgurl}/${cat.img}`}
+                              src={`${imgurl}/uploads/${cat.img}`}
                               alt={cat.type}
                               className="w-16 h-16 rounded-xl object-cover shadow-md border border-gray-200 group-hover/image:scale-110 transition-transform duration-200"
                             />

@@ -28,7 +28,6 @@ const Page = () => {
       setLoading(true);
       const response = await axios.get(`${baseurl}/petcat`);
       const data = await response.data;
-      console.log(data)
       if (data.success) {
         setData(data.petCategory);
         setError(null);

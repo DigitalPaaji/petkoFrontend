@@ -6,6 +6,8 @@ import Showproduct from './Showproduct'
 import ShowcartProduct from './ShowcartProduct'
 import axios from 'axios'
 import { baseurl } from '@/app/admin/components/apis'
+import { toast } from 'react-toastify'
+import Swal from 'sweetalert2'
 axios.defaults.withCredentials= true
 
 const page = () => {
@@ -14,7 +16,8 @@ const [buyType,setbuyType]=useState()
 const [addressId,setAddressId]= useState()
 const [couponCode,setcouponCode]= useState()
 const [paymentMethod,setPaymentMethod]= useState("COD")
-const [orderItems,setorderItems]=useState()
+const [orderItems,setorderItems]=useState([])
+
 
     useEffect(()=>{
 const item=  JSON.parse(localStorage.getItem("checkoutstatus"))
@@ -24,8 +27,6 @@ router.push("/")
 }
 setbuyType(item)
 
-console.log(item)
-
 
 
     },[])
@@ -34,23 +35,44 @@ console.log(item)
 
 
 
-const processOrder= async()=>{
+const processOrder= async(shippingPrice,taxPrice,payNow)=>{
+if(!addressId){
+  toast.error("Add Address")
+  return
+}
+
   try {
     const response = await axios.post(`${baseurl}/order/createorder`,{
       addressId,
       couponCode,
       paymentMethod,
-      orderItems
+      orderItems,
+      shippingPrice,
+      taxPrice
     })
 
   const data = await response.data;
-  console.log(data)
+ 
+  if(data.success){
+    
+    localStorage.clear("checkoutstatus")
+    Swal.fire({
+  title: data.message,
+  icon: "success",
+  draggable: true
+});
+router.push("/")
+  }else{
+        toast.error(data.message)
+
+  }
 
 
 
 
   } catch (error) {
-    
+           toast.error(error.message)
+ 
   }
 }
 
@@ -78,7 +100,7 @@ const processOrder= async()=>{
    {buyType?.type=="buy"
  ?
   <Showproduct   buyType={buyType}   setcouponCode={setcouponCode} setorderItems={setorderItems}  processOrder={processOrder}/>
-: <ShowcartProduct   setcouponCode={setcouponCode} setorderItems={setorderItems}  />
+: <ShowcartProduct   setcouponCode={setcouponCode} setorderItems={setorderItems} processOrder={processOrder}  orderItems={orderItems} />
   }
 </div>
 

@@ -11,13 +11,21 @@ import Link from "next/link";
 import Image from "next/image";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useDispatch } from "react-redux";
+import { getPet } from "./store/slices/petSlice";
 
 export default function Navbar() {
+
+const dispatch = useDispatch()
+
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   useEffect(() => {
+dispatch(getPet())
+
+
     AOS.init({ duration: 800, once: true });
     const handleScroll = () => setScrolled(window.scrollY > 100);
     window.addEventListener("scroll", handleScroll);

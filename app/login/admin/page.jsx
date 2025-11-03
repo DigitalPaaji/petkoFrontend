@@ -73,7 +73,6 @@ password:formData.password
         withCredentials:true
       })
       const data = await response.data;
-      console.log(data)
       if(data.success){
 router.push("/admin")
       }

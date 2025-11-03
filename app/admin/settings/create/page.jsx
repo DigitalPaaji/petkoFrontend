@@ -61,7 +61,6 @@ const Page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Form Data:', formData)
 
     try {
       // Create FormData object for file upload

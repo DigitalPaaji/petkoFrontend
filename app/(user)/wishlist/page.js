@@ -29,7 +29,6 @@ export default function CartSidebar() {
       const response = await axios.get(`${baseurl}/wishlist/allwishlistitem`);
       const data = await response.data;
       if (data.success) {
-        console.log(data);
         setWishlist(data.data || []);
       } else {
         setWishlist([]);

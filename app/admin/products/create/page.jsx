@@ -204,7 +204,6 @@ const CreateProduct = () => {
       // });
 
 
-console.log(formData)
 
       const response = await axios.post(`${baseurl}/product/create`, submitData,{
           headers: {

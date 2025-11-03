@@ -1,9 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
-import Offer from "../components/Offer";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+
 import { Flip, ToastContainer } from "react-toastify";
+import { Provider } from "react-redux";
+import store from "../components/store/store";
+import Provideradd from "../components/Provideradd";
 // import LoginSignup from "../components/user/LoginSignup";
 // import Wishlist from "../components/user/Wishlist";
 
@@ -42,15 +43,9 @@ pauseOnHover
 theme="light"
 transition={Flip}
 />
-
-
-        <Offer />
-
-        <Navbar />
-
-        {children}
-        <Footer />
-        {/* <PopupModal/> */}
+<Provideradd>
+  {children}
+</Provideradd>
       </body>
     </html>
   );

@@ -5,6 +5,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import axios from 'axios';
+import { baseurl, imgurl } from '../admin/components/apis';
+import { useEffect, useState } from 'react';
 
 const BlogSection = ({ blogs = [] }) => {
   // Sample blog data
@@ -90,6 +93,33 @@ const BlogSection = ({ blogs = [] }) => {
       day: 'numeric',
     });
 
+
+
+const [allBlogs,setAllBlogs]=useState()
+
+
+const fetchBlog= async()=>{
+  try {
+    const response = await axios.get(`${baseurl}/blog/topblog`);
+    const data = await response.data;
+    if(data.success){
+setAllBlogs(data.blogs)
+    }else{
+      setAllBlogs(null)
+    }
+  } catch (error) {
+        setAllBlogs(null)  
+  }
+}
+
+
+
+useEffect(()=>{
+  fetchBlog()
+},[])
+
+
+
   return (
     <section className="relative mx-4 md:mx-12 xl:mx-24 2xl:mx-40 my-16 p-6 lg:p-8">
       {/* Section Heading */}
@@ -112,13 +142,13 @@ const BlogSection = ({ blogs = [] }) => {
           }}
           className="mySwiper"
         >
-          {displayBlogs.map((blog) => (
+          {allBlogs?.map((blog) => (
             <SwiperSlide key={blog._id}>
               <div className="cursor-default group w-full bg-white rounded-lg overflow-hidden border border-transparent hover:border-[#6666664d] transition-transform duration-300">
                 {/* Blog Image */}
                 <div className="relative w-full aspect-[4/3] overflow-hidden">
                   <img
-                    src={blog.images?.[0] || 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=400&h=300&fit=crop'}
+                    src={ blog.images?.[0]? `${imgurl}/uploads/${blog.images?.[0]}`: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=400&h=300&fit=crop'}
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -144,8 +174,8 @@ const BlogSection = ({ blogs = [] }) => {
                     {blog.title}
                   </h4>
 
-                  <p className="text-gray-600 text-sm mt-2 line-clamp-3">
-                    {blog.description}
+                  <p className="text-gray-600 text-sm mt-2 line-clamp-3" dangerouslySetInnerHTML={{__html:blog.description}}>
+                   
                   </p>
 
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-4">

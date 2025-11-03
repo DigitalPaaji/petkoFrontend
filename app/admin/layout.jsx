@@ -178,13 +178,22 @@ transition={Flip}
       )}
 
 
+
+
+
+
+
+
+
+
+
+
       <div
-        className={`fixed inset-y-0 left-0 z-30 w-80 bg-gradient-to-b from-white to-blue-50 shadow-xl transform transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-blue-100 ${
+        className={`fixed inset-y-0 left-0 z-30 h-screen  bg-gradient-to-b from-white to-blue-50 shadow-xl transform transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-blue-100 ${
           isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } ${isSidebarOpen ? 'lg:w-80' : 'lg:w-20'}`}
+        } ${isSidebarOpen ? 'lg:w-80' : 'lg:w-24'}`}
       >
-        <div className="flex flex-col h-full">
-          {/* Sidebar Header */}
+        <div className="flex flex-col  h-full justify-between">
           <div className="flex items-center justify-between p-6 border-b border-blue-100 bg-white/80 backdrop-blur-sm">
             {isSidebarOpen && (
               <div className="flex items-center space-x-3">
@@ -193,7 +202,6 @@ transition={Flip}
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-gray-800">PetKo</h1>
-                  {/* <p className="text-xs text-gray-500">Admin Panel</p> */}
                    <p className="text-xs text-gray-500">{lastLogin}</p>
 
                 </div>
@@ -212,7 +220,7 @@ transition={Flip}
           </div>
 
         
-          <nav className="flex-1 px-4 py-6 space-y-1">
+          <nav className=" overflow-auto  px-4 py-6 space-y-1">
 
 {  
 
@@ -276,7 +284,6 @@ transition={Flip}
             })}
           </nav>
 
-          {/* Sidebar Footer */}
           <div className="p-4 border-t border-blue-100 bg-white/80">
             <div className="flex items-center space-x-3 mb-4 p-3 bg-gradient-to-r from-orange-400 to-pink-400 rounded-xl text-white">
               <div className="p-2 bg-white/20 rounded-lg">
@@ -298,7 +305,23 @@ transition={Flip}
             </button>
           </div>
         </div>
-      </div>
+      </div> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       <div className=" flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}

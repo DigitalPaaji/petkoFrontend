@@ -363,7 +363,7 @@ route.push("/checkout")
                 <div className="flex justify-between">
                   <span>Price</span>
                   <span className="text-gray-500">
-    ${cartItem.reduce((acc,dec)=>  (dec?.productId?.comparePrice *dec.quantity) +acc ,0 )}
+    ${cartItem?.reduce((acc,dec)=>  (dec?.productId?.comparePrice *dec.quantity) +acc ,0 )}
 
                   </span>
                 </div>
@@ -371,7 +371,7 @@ route.push("/checkout")
                 <div className="flex justify-between">
                   <span>Discount</span>
                   <span className="text-gray-500">
-   - ${cartItem.reduce((acc,dec)=> acc + (dec?.productId?.comparePrice*dec.quantity - dec?.productId?.price*dec.quantity) ,0 )}
+   - ${cartItem?.reduce((acc,dec)=> acc + (dec?.productId?.comparePrice*dec.quantity - dec?.productId?.price*dec.quantity) ,0 )}
 
                   </span>
                 </div>
@@ -383,7 +383,7 @@ route.push("/checkout")
                   <span>
                     $
                    {
-                    cartItem.reduce((acc,dec)=>  (dec?.price *dec.quantity) +acc ,0 )
+                    cartItem?.reduce((acc,dec)=>  (dec?.price *dec.quantity) +acc ,0 )
                    }
                   </span>
                 </div>

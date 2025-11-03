@@ -413,7 +413,6 @@ export default function Shop() {
  const [searchProduct,setSearchProduct]=useState()
 const [searchdata,setSearchData]=useState([])
 
-console.log(searchdata)
 
  const router = useRouter()
  const searchParams = useSearchParams()

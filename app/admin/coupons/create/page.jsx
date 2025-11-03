@@ -81,7 +81,6 @@ const CreateCouponPage = () => {
 
     setIsSubmitting(true);
 
-    console.log(formData)
 
     try {
 
@@ -98,7 +97,6 @@ const CreateCouponPage = () => {
  })
 
  const data = await response.data;
- console.log(data)
  if(data.success){
 
     toast.success("Coupon created successfully!")

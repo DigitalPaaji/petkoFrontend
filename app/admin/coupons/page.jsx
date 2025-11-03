@@ -14,7 +14,6 @@ const Page = () => {
     try {
       const response = await axios.get(`${baseurl}/coupon/allcode`)
       const data = await response.data
-      console.log(data)
       setCoupons(data.data || [])
     } catch (error) {
       console.error('Error fetching coupons:', error)

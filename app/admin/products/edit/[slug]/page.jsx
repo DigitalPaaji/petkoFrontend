@@ -62,7 +62,6 @@ const Page = ({ params: { slug } }) => {
     isFeatured: false,
   });
 
-      console.log(formData)
 
 
 
@@ -311,8 +310,7 @@ const Page = ({ params: { slug } }) => {
 
  const filterimage= formData.images.filter(path=> path !==imgname)
  setFormData({...formData,images:filterimage})
- console.log("Deleted image:", imgname);
-  console.log("Images to delete:", imagesToDelete);
+ 
 
   }
 
