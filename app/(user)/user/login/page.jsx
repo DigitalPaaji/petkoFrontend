@@ -168,12 +168,12 @@ setLoading(true)
             <div variants={itemVariants} className="text-center mt-6">
               <p className="text-gray-600">
              Don't have an account?
-                <Link
+            {" "}    <Link
                   href={"/user/signup"}
                  
                   className="text-[#f58f80] font-semibold hover:underline"
                 >
-             signup
+             Sign Up
                 </Link>
               </p>
             </div>
