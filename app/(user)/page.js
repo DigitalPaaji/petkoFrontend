@@ -18,7 +18,7 @@ export default function Home() {
      <Pets/>
        <Shop/>
       {/* <RelatedProducts/> */}
-      {/* <Reviews/> */}
+      <Reviews/>
 
       <BlogSection />
     </div>
