@@ -73,7 +73,7 @@ useEffect(()=>{
   return (
     <div className="mx-4 md:mx-12 xl:mx-24 2xl:mx-40 my-16 p-6 lg:p-8">
       {/* Tab Navigation */}
-      <div className="flex flex-wrap gap-2 md:gap-4 border-b border-[#6666664d]">
+      <div className="flex flex-nowrap gap-2 md:gap-4 border-b border-[#6666664d]">
         {tabs.map((tab) => (
           <button
             key={tab.id}

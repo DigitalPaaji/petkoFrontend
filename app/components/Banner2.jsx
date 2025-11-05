@@ -71,7 +71,7 @@ useEffect(()=>{
 
 
   return (
-    <div className="flex flex-wrap xl:flex-nowrap h-[600px] px-4 md:px-12 xl:px-24 2xl:px-40 py-16 gap-4 xl:gap-6">
+    <div className="flex flex-wrap xl:flex-nowrap xl:h-[600px] px-4 md:px-12 xl:px-24 2xl:px-40 py-16 gap-4 xl:gap-6">
       
       {/* LEFT: Category Section */}
       <div className="w-full xl:w-[20%] h-full p-4 xl:p-6 bg-white rounded-lg shadow-sm overflow-y-scroll">
