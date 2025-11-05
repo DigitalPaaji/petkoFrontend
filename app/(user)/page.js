@@ -13,14 +13,14 @@ export default function Home() {
   return (
     <div className="bg-[#91919127]">
       <Banner/>
-      <Banner2/>
+      {/* <Banner2/>
       <New/>
       <Pets/>
-      <Shop/>
+      <Shop/> */}
       {/* <RelatedProducts/> */}
-      <Reviews/>
+      {/* <Reviews/> */}
 
-      <BlogSection />
+      {/* <BlogSection /> */}
     </div>
   );
 }
