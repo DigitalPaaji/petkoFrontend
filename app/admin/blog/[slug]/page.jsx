@@ -114,7 +114,7 @@ const Page = async ({ params: { slug } }) => {
                 // Single image
                 <div className="rounded-2xl overflow-hidden shadow-lg">
                   <img
-                    src={`${imgurl}/${blog.images[0]}`}
+                    src={`${imgurl}/uploads/${blog.images[0]}`}
                     alt={blog.title}
                     className="w-full h-64 md:h-96 object-cover"
                   />
@@ -125,7 +125,7 @@ const Page = async ({ params: { slug } }) => {
                   {blog.images.map((image, index) => (
                     <div key={index} className="rounded-2xl overflow-hidden shadow-lg">
                       <img
-                        src={`${imgurl}/${image}`}
+                        src={`${imgurl}/uploads/${image}`}
                         alt={`${blog.title} - Image ${index + 1}`}
                         className="w-full h-64 object-cover"
                       />
