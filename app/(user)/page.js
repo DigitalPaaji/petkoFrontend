@@ -15,8 +15,8 @@ export default function Home() {
       <Banner/>
      <Banner2/>
        <New/>
-    {/*   <Pets/>
-      <Shop/> */}
+     <Pets/>
+    {/*    <Shop/> */}
       {/* <RelatedProducts/> */}
       {/* <Reviews/> */}
 
