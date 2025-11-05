@@ -13,8 +13,8 @@ export default function Home() {
   return (
     <div className="bg-[#91919127]">
       <Banner/>
-      {/* <Banner2/>
-      <New/>
+     <Banner2/>
+      {/*  <New/>
       <Pets/>
       <Shop/> */}
       {/* <RelatedProducts/> */}
