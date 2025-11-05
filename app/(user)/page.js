@@ -14,8 +14,8 @@ export default function Home() {
     <div className="bg-[#91919127]">
       <Banner/>
      <Banner2/>
-      {/*  <New/>
-      <Pets/>
+       <New/>
+    {/*   <Pets/>
       <Shop/> */}
       {/* <RelatedProducts/> */}
       {/* <Reviews/> */}
