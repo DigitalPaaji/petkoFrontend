@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 import { useSelector } from "react-redux";
 import { baseurl, imgurl } from "../admin/components/apis";
 import axios from "axios";
+import Link from "next/link";
 
 // Simplified JSON data with product images and names only
 // const productData = {
@@ -361,7 +362,7 @@ useEffect(()=>{
           >
 
             {productData?.map((product, index) => (
-              <div key={index} className="cursor-default group w-48 flex-shrink-0 text-center  flex flex-col items-center">
+              <Link href={`/shop/?cat=${product._id}`} key={index} className="cursor-pointer group w-48 flex-shrink-0 text-center  flex flex-col items-center">
                 <div className="relative w-36 h-36  rounded-lg mb-3">
                   <img
                     src={`${imgurl}/uploads/${product.img}`}
@@ -380,7 +381,7 @@ useEffect(()=>{
                     {product?.product_name}
                   </h4>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

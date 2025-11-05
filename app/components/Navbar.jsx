@@ -11,8 +11,10 @@ import Link from "next/link";
 import Image from "next/image";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getPet } from "./store/slices/petSlice";
+import axios from "axios";
+import { baseurl } from "../admin/components/apis";
 
 export default function Navbar() {
 
@@ -33,25 +35,6 @@ dispatch(getPet())
   }, []);
 
 const navLinks = [
-  { name: "Home", href: "/" },
-
-  // SHOP DROPDOWN (static for now)
-  {
-    name: "Shop",
-    dropdown: [
-      {
-        name: "Categories",
-        items: [
-          { name: "Dogs", href: "/shop/dogs" },
-          { name: "Cats", href: "/shop/cats" },
-          { name: "Birds", href: "/shop/birds" },
-          { name: "Fish", href: "/shop/fish" },
-        ],
-      },
-    ],
-  },
-
-  // PAGES DROPDOWN (matches footer sections)
   {
     name: "Pages",
     dropdown: [
@@ -80,14 +63,69 @@ const navLinks = [
 
 
 
+ const [petcategory,setPetCategory]=useState()
+
+const pets = useSelector((state)=>state.petslice)
+ const [searchProduct,setSearchProduct]=useState()
+const [searchdata,setSearchData]=useState([])
+
+
+
+
+useEffect(()=>{
+
+
+  if(pets?.info || pets?.info?.success){
+    setPetCategory(pets?.info?.petCategory)
+  }
+},[pets])
+
+
+
+
+
+
+
+const searchProfetch=async(val)=>{
+try {
+   const response = await axios.get(`${baseurl}/product/search/${val}`);
+ const data = await response.data;
+ if(data.success){
+setSearchData(data.products)
+ }
+ else{
+  setSearchData([])
+ }
+  
+} catch (error) {
+    setSearchData([])
+
+}
+
+
+}
+
+
+
+
+useEffect(()=>{
+  if(!searchProduct?.length > 0) return;
+const setval= setTimeout(() => {
+  searchProfetch(searchProduct)
+},500);
+
+return ()=>clearTimeout(setval)
+},[searchProduct])
+
+
+
   return (
     <>
       {/* ----------------- MAIN NAVBAR (before scroll) ----------------- */}
       {!scrolled && (
-        <nav className=" w-full bg-white z-[999] transition-all duration-500 ease-out border-b border-[#6666664d] ">
+        <nav className="  w-full bg-white z-[999] transition-all duration-500 ease-out border-b border-[#6666664d] ">
           {/* Top Section */}
-          <div className="flex items-center justify-between py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
-            {/* Logo */}
+ <div className="flex items-center justify-between py-2 px-4 md:px-12 xl:px-24 2xl:px-40">
             <Link href="/" className="w-32 ">
               <Image
                 src="/Images/frontend/logo.webp"
@@ -99,7 +137,89 @@ const navLinks = [
             </Link>
 
 
-<div className="hidden lg:flex lg:space-x-8 nav-links">
+<div className=" hidden  lg:flex lg:space-x-8 nav"> 
+
+ <div
+      
+      className="relative group"
+      onMouseLeave={() => setActiveDropdown(null)}
+    >
+      <Link
+        href={"/"}
+        className="font-semibold py-4 text-[#666] hover:text-[#F48C7F] flex items-center gap-1 relative
+                   transition-all duration-300 ease-in-out
+                   border-t-2 border-transparent hover:border-[#F48C7F]
+                   before:content-[''] before:absolute before:top-[-1px] before:left-0 
+                   before:w-full before:h-px before:bg-white before:opacity-0 
+                   before:transition-opacity before:duration-300 before:ease-in-out
+                   hover:before:opacity-100"
+      >
+        Home
+      </Link>
+
+     
+    </div>
+
+
+
+  <div
+   
+      className="relative group"
+      onMouseEnter={() => setActiveDropdown("shop")}
+      onMouseLeave={() => setActiveDropdown(null)}
+    >
+      <Link
+        href={"/shop"}
+        className="font-semibold py-4 text-[#666] hover:text-[#F48C7F] flex items-center gap-1 relative
+                   transition-all duration-300 ease-in-out
+                   border-t-2 border-transparent hover:border-[#F48C7F]
+                   before:content-[''] before:absolute before:top-[-1px] before:left-0 
+                   before:w-full before:h-px before:bg-white before:opacity-0 
+                   before:transition-opacity before:duration-300 before:ease-in-out
+                   hover:before:opacity-100"
+      >
+       Shop
+         <RiArrowDropDownLine className="text-2xl" />
+      </Link>
+
+     
+    {activeDropdown === "shop" && (
+        <div
+          className="absolute left-0 w-60 bg-white border border-gray-200 
+                     py-4 px-4 shadow-xl z-50 dropdown-menu"
+        >
+          <div
+            className="absolute top-[-8px] left-5 w-0 h-0 
+                       border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent 
+                       border-b-[8px] border-b-white dropdown-arrow"
+          ></div>
+
+
+            <div
+           
+            >
+              <h4 className="font-semibold text-[#333] mb-2">
+                Categories
+              </h4>
+              <ul>
+                {petcategory?.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={`/shop/?pet=${item._id}`}
+                      onClick={() => setActiveDropdown(null)}
+                      className="block py-1 text-[#555] hover:text-[#F48C7F] transition-colors"
+                    >
+                      {item?.type}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+        
+        </div>
+      )} 
+    </div>
+
   {navLinks.map((link, index) => (
     <div
       key={link.name}
@@ -121,7 +241,6 @@ const navLinks = [
         {link.dropdown && <RiArrowDropDownLine className="text-2xl" />}
       </Link>
 
-      {/* Dropdown Menu */}
       {link.dropdown && activeDropdown === index && (
         <div
           className="absolute left-0 w-60 bg-white border border-gray-200 
@@ -132,6 +251,14 @@ const navLinks = [
                        border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent 
                        border-b-[8px] border-b-white dropdown-arrow"
           ></div>
+
+
+
+
+
+
+
+
 
           {link.dropdown.map((section, sectionIndex) => (
             <div
@@ -164,32 +291,59 @@ const navLinks = [
 
             
             <div className="flex items-center gap-4">
-            {/* Search Bar */}
             <div className="hidden xl:flex items-center justify-center gap-1 w-[340px]">
-              <div className="flex items-center gap-1 w-full px-2 py-1.5 border border-[#6666664d] rounded-md">
+              <div className="flex items-center gap-1 w-full px-2 py-1.5 border border-[#6666664d] rounded-md relative">
               <CiSearch  className="w-6 h-6 text-[#666] object-cover"/>
               
               <input
                 type="search"
                 placeholder="Search Pet Accessories"
                 className="focus:outline-none"
+                 value={searchProduct}
+                  onChange={(e) =>setSearchProduct(e.target.value) }
               />
+
+
+
+{ searchProduct && searchdata?.length? 
+
+<div className="flex flex-col gap-2 absolute  top-full bg-white w-full shadow-2xl mt-2 py-2 z-[999]">
+{searchdata.map((item,index)=>{
+  return(
+    <Link key={index}
+    onClick={()=>searchProduct(null)}
+      href={`/shop/${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50 ">
+    {item.name}
+    </Link>
+
+
+
+  )
+})}
+
+</div>
+:""
+}
+
+
+
+
+
+              
               </div>
               <button className="text-md text-white font-semibold bg-[#F48C7F] px-4 py-1.5 rounded-md">
                 Search
               </button>
             </div>
 
-            {/* Hotline */}
-            {/* <div className="hidden xl:flex items-center gap-2">
+            <div className="hidden xl:flex items-center gap-2">
               <LuPhone className="w-6 h-6 text-[#666]" />
               <div>
                 <h4 className="text-md font-medium text-[#666]">Hotline</h4>
                 <h3 className="font-semibold text-md">1-800-234-5678</h3>
               </div>
-            </div> */}
+            </div>
 
-            {/* Icons + Hamburger */}
             <div className="flex items-center space-x-3 lg:space-x-6">
               <button className="block xl:hidden ">
                 <FiSearch  className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
@@ -197,9 +351,7 @@ const navLinks = [
               </button>
               <Link href="/cart" className="relative">
                 <ShoppingCart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
-                <span className="absolute -top-3 -right-3 bg-[#F48C7F] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
-                  0
-                </span>
+               
               </Link>
               <Link href="/wishlist">
                 <Heart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
@@ -207,7 +359,6 @@ const navLinks = [
               <Link className="" href={"/user/dashboard"}>    <User className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
 
 </Link> 
-              {/* Hamburger */}
               <button
                 className="lg:hidden"
                 onClick={() => setIsOpen(!isOpen)}
@@ -221,7 +372,7 @@ const navLinks = [
               </button>
             </div>
 </div>
-          </div>
+          </div> 
 
           {/* Bottom Nav Links */}
 {/* 
@@ -363,12 +514,37 @@ const navLinks = [
             </Link>
 
             {/* Search Bar */}
-            <div className="hidden lg:flex items-center justify-center gap-0.5 w-[500px]">
+            <div className="hidden lg:flex items-center justify-center gap-0.5 w-[500px] relative">
               <input
                 type="search"
                 placeholder="Search Pet Accessories"
                 className="w-full px-6 py-1.5 border border-[#6666664d] rounded-md"
+                   value={searchProduct}
+                  onChange={(e) =>setSearchProduct(e.target.value) }
+
               />
+{ searchProduct && searchdata?.length? 
+
+<div className="flex flex-col gap-2 absolute  top-full bg-white w-full shadow-2xl mt-2 py-2 z-[999]">
+{searchdata.map((item,index)=>{
+  return(
+    <Link key={index}
+    onClick={()=>searchProduct(null)}
+      href={`/shop/${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50 ">
+    {item.name}
+    </Link>
+
+
+
+  )
+})}
+
+</div>
+:""
+}
+
+
+
               <button className="text-md text-white font-semibold bg-[#F48C7F] px-4 py-1.5 rounded-md">
                 Search
               </button>
@@ -387,9 +563,9 @@ const navLinks = [
             <div className="flex items-center space-x-3 lg:space-x-6">
               <Link href="/cart" className="relative">
                 <ShoppingCart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
-                <span className="absolute -top-3 -right-3 bg-[#F48C7F] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                {/* <span className="absolute -top-3 -right-3 bg-[#F48C7F] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
                   0
-                </span>
+                </span> */}
               </Link>
               <Heart className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
               <User className="w-6 h-6 text-gray-600 hover:text-[#F48C7F]" />
@@ -411,7 +587,6 @@ const navLinks = [
         </nav>
       )}
 
-      {/* ----------------- SIDEBAR ----------------- */}
       <div
         className={`fixed lg:hidden top-0 right-0 h-full w-[80%] md:w-[40%] bg-white text-[#3e5f68] shadow-lg transform transition-transform duration-300 z-[1000] ${
           isOpen ? "translate-x-0" : "translate-x-full"
@@ -433,6 +608,79 @@ const navLinks = [
         </div>
 
         <div className="flex flex-col space-y-6 px-6 py-8">
+
+
+ <Link
+              
+              href={"/"}
+              className="text-lg font-semibold hover:text-[#F48C7F] transition"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
+
+
+<div
+              
+             
+              className="text-lg font-semibold hover:text-[#F48C7F] transition"
+              onClick={() => setActiveDropdown(activeDropdown==="shop"?"":"shop")}
+            >
+              Shop
+
+
+
+        <div
+          className={` px-4 overflow-hidden ${activeDropdown === "shop"? "h-48" :"h-0"}  duration-300      `}
+        >
+          <div
+            className="absolute top-[-8px] left-5 w-0 h-0 
+                       border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent 
+                       border-b-[8px] border-b-white dropdown-arrow"
+          ></div>
+
+
+            <div
+           
+            >
+              <h4 className="font-semibold text-[#333] mb-2">
+                Categories
+              </h4>
+              <ul>
+                {petcategory?.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={`/shop/?pet=${item._id}`}
+                      onClick={() => {setIsOpen(false)}}
+                      
+                      className="block py-1 text-[#555] hover:text-[#F48C7F] transition-colors"
+                    >
+                      {item?.type}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+        
+        </div>
+     
+
+<div>
+
+
+
+</div>
+
+
+
+
+
+            </div>
+
+
+
+
+
           {navLinks.map((link) => (
             <Link
               key={link.name}

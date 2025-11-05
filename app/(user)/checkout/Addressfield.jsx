@@ -17,7 +17,7 @@ import { toast } from 'react-toastify'
 
 axios.defaults.withCredentials = true
 
-const Addressfield = ({setAddressId}) => {
+const Addressfield = ({setAddressId=null}) => {
   const [showForm, setShowForm] = useState(false)
   const [addresses, setAddresses] = useState([])
   const [editingAddress, setEditingAddress] = useState(null)
@@ -32,14 +32,17 @@ const Addressfield = ({setAddressId}) => {
         setAddresses(data.data)
 data.data.forEach((item)=> {
   if(item.default){
+    if(setAddressId){
+
+    
     setAddressId(item._id)
-  }
+    }}
 })
 
       }
     } catch (error) {
       console.error("Error fetching addresses:", error)
-      toast.error("Failed to load addresses")
+      toast.error(`Failed to load addresses   . ${error}`)
     } finally {
       setLoading(false)
     }

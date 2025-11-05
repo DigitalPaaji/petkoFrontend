@@ -12,9 +12,10 @@ import Image from "next/image";
 import { Heart } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { imgurl } from "../admin/components/apis";
 
 
-function RelatedProducts() {
+function RelatedProducts({data}) {
   const [products, setProducts] = useState([]);
 
   const [loading, setLoading] = useState(true);
@@ -133,49 +134,52 @@ function RelatedProducts() {
             loop={true}
             grabCursor={true}
           >
-            {loop.map((item, idx) => (
+            {data?.map((product,idx) => (
               <SwiperSlide key={idx}>
-                <div className="cursor-default group w-full bg-white overflow-hidden  transition-transform duration-300 border border-transparent hover:border-[#6666664d] ">
-                  <div className="relative w-full aspect-square overflow-hidden ">
-                    <img
-                      src={item.images?.[0]}
-                      alt={item.name}
-                      className="w-full h-full object-contain"
-                    />
-               <div
-        // data-aos="fade-up"
-        // data-aos-duration="300"
-        className="absolute bottom-0 left-0 right-0 py-2 w-full bg-white opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2"
-      >
-        <div className="w-9 h-9 p-2 hover:bg-[#F48C7F] rounded-full transition-colors duration-300">
-          <HiOutlineShoppingBag
-            className="w-full h-full text-gray-700 cursor-pointer"
-          />
-        </div>
-
-        <div className="w-9 h-9 p-2 hover:bg-[#F48C7F] rounded-full transition-colors duration-300">
-          <Heart className="w-full h-full text-gray-700 cursor-pointer" />
-        </div>
-
-        <div className="w-9 h-9 p-2 hover:bg-[#F48C7F] rounded-full transition-colors duration-300">
-          <IoEyeOutline className="w-full h-full text-gray-700 cursor-pointer" />
-        </div>
-      </div>
-                  </div>
-
-                  <div className="p-4 ">
-                    <h4 className="font-normal text-[#2ea2cc] group-hover:text-[#F48C7F] transition-colors text-md truncate">
-                      {item.name}
-                    </h4>
-
-                    <div className="">
-                      ₹{item.finalPrice}{" "}
-                      <span className="text-[#666] text-sm line-through">
-                        ₹{item.price}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+              
+                            <div
+                              key={product._id}
+                              className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
+                            >
+                              <div className="relative aspect-square overflow-hidden">
+                                <img
+                                  src={`${imgurl}/uploads/${product.images?.[0]}`||
+                                    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80"
+                                  }
+                                  alt={product.name || "Product"}
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                  className="object- transform group-hover:scale-105 transition-transform duration-700 object-contain"
+                                />
+                              </div>
+              
+                              <div className="p-4">
+                                <Link href={`/shop/${product?.slug}`} className="block">
+                                  <h3 className="font-medium capitalize text-gray-900 group-hover:text-green-700 transition-colors duration-200 mb-2 line-clamp-2">
+                                    {product?.name}
+                                  </h3>
+                                </Link>
+              
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-lg font-semibold text-gray-900">
+                                      ${product.price.toFixed(2)}
+                                    </span>
+                                    {product.comparePrice > product.price && (
+                                      <span className="text-sm text-gray-500 line-through">
+                                        ${product.comparePrice.toFixed(2)}
+                                      </span>
+                                    )}
+                                  </div>
+                                  {product.rating && (
+                                    <div className="text-xs text-gray-500 flex items-center">
+                                      <span>★</span>
+                                      <span className="ml-1">{product.rating.rating}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                        
               </SwiperSlide>
             ))}
           </Swiper>

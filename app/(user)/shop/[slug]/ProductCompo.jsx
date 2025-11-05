@@ -20,6 +20,11 @@ const ProductCompo = ({ productData }) => {
   const [position, setPosition] = useState({ x: 50, y: 50 });
   const router = useRouter();
   const [charges, setCharges] = useState();
+const [relatedPro,setRelatedProduct]=useState()
+
+
+console.log("sdfsdf",relatedPro);
+
 
 
   const reviews = [
@@ -119,8 +124,26 @@ const ProductCompo = ({ productData }) => {
   };
 
   
+const fetchRelatedPRoduct=async(petcategory)=>{
+  try {
+    const response = await axios.get(`${baseurl}/product/allproducts/?pet=${petcategory}`);
+    const data = await response.data;
+    if(data.success){
+setRelatedProduct(data.products)
+    }else{
+     setRelatedProduct(null) 
+    }
+  } catch (error) {
+         setRelatedProduct(null) 
+
+  }
+
+}
+
+
 
   useEffect(() => {
+    fetchRelatedPRoduct(productData?.petcategory?._id)
     fetchwishlst();
     fetchChargies();
   }, []);
@@ -464,7 +487,7 @@ const ProductCompo = ({ productData }) => {
           </div>
         </section>
       </div>
-      <RelatedProducts />
+      <RelatedProducts  data={relatedPro}/>
     </>
   );
 };

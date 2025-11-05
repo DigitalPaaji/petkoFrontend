@@ -8,6 +8,7 @@ import { Heart, ShoppingBag } from "lucide-react";
 import axios from "axios";
 import { baseurl, imgurl } from "@/app/admin/components/apis";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
 
 
 export default function Composhop() {
@@ -21,6 +22,9 @@ export default function Composhop() {
   });
   const [sortBy, setSortBy] = useState("featured");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+
+
 
   const staticProducts = [
     {
@@ -348,7 +352,6 @@ export default function Composhop() {
       );
     }
 
-    // Price Range (checkbox)
     if (filters.priceRange.length > 0) {
       filtered = filtered.filter((p) => {
         return filters.priceRange.some((range) => {
@@ -404,8 +407,9 @@ export default function Composhop() {
     });
   };
 
-  const clearFilters = () =>
-    setFilters({ category: [], priceRange: [], search: "" });
+  const clearFilters = () =>{
+    location.href="/shop"
+  };
 
 
   const [pagination,setPagination]=useState()
@@ -413,26 +417,37 @@ export default function Composhop() {
  const [petcategory,setPetCategory]=useState()
  const [searchProduct,setSearchProduct]=useState()
 const [searchdata,setSearchData]=useState([])
+const [Category,setCategories]= useState()
+const pets = useSelector((state)=>state.petslice)
 
 
  const router = useRouter()
    const searchParams = useSearchParams();
-  const category = searchParams.get("category");
-//  const searchParams = useSearchParams()
   const sort = searchParams.get("sort"); 
  const urlpage= searchParams.get("page") || 1;
+const cat = searchParams.get("cat");
 
 
+const fetchdata = async()=>{
+  try {
+    const response = await axios.get(`${baseurl}/productcat/getRandom`)
+    const data = await response.data
+    if(data.success){
+    setCategories(data.data)
 
+    }else{
+      setCategories(null)
+    }
+  } catch (error) {
+          setCategories(null)
 
-const fetchpetCat= async()=>{
-  const response = await axios.get(`${baseurl}/petcat/`)
-  const data= await response.data;
-  if(data.success){
-
-setPetCategory(data.petCategory)
   }
 }
+
+
+
+
+
  const fetchProduct = useCallback(
     async () => {
       try {
@@ -452,8 +467,29 @@ setPetCategory(data.petCategory)
   );
 
 
+
+  const fetchProductcat = async(id)=>{
+try {
+  const response = await axios.get(`${baseurl}/productcat/petcat/${id}`);
+  const data = await response.data;
+  if(data.success){
+    setCategories(data.data)
+  }
+  else{
+    setCategories(null)
+  }
+
+
+} catch (error) {
+      setCategories(null)
+
+}
+}
+
+
    useEffect(() => {
-    fetchpetCat(); 
+
+fetchdata()
   }, []);
 
 useEffect(() => {
@@ -480,12 +516,31 @@ useEffect(() => {
 
 
  const handleSort = (value) => updateQuery("sort", value);
-  const handlePet = (value) => updateQuery("pet", value);
+  const handlePet = (value) =>{ updateQuery("pet", value);
+    fetchProductcat(value)
+  }
 const handelpage= (value)=>updateQuery("page",value)
+const handelcat = (value)=>updateQuery("cat",value)
+
+
+
+useEffect(()=>{
+
+
+  if(pets?.info || pets?.info?.success){
+    setPetCategory(pets?.info?.petCategory)
+  }
+},[pets])
+
 
 
 const handelminmax=(value)=>{
   const minmax= value.split("-");
+
+
+
+
+
 
   // if(minmax[0]){
   //   updateQuery("minPrice",minmax[0])
@@ -496,7 +551,7 @@ const handelminmax=(value)=>{
 
 
 }
-
+ 
 
 
 const searchProfetch=async(val)=>{
@@ -625,26 +680,21 @@ return ()=>clearTimeout(setval)
               <label className="block text-sm font-medium text-gray-900 mb-2">
                 Price Range
               </label>
-              {[
-                { label: "Under $50", value: "0-50" },
-                { label: "$50 - $100", value: "50-100" },
-                { label: "$100 - $200", value: "100-200" },
-                { label: "$200+", value: "200," },
-              ].map((p) => (
+              {Category?.map((p,index) => (
                 <label
                   key={p.value}
-                  onClick={()=>handelminmax(p.value)}
+                  htmlFor={`productcat-${index}`}
                   className="flex items-center gap-2 text-sm text-gray-700 mb-1"
                 >
                   <input
                     type="radio"
-                    name="price"
-
+                    name="productcat"
+                      id={`productcat-${index}`}
                     // checked={filters.priceRange.includes(p.value)}
-                    onChange={() => handleCheckboxChange("priceRange", p.value)}
+                    onChange={() => handelcat( p._id)}
                     className="rounded border-gray-300 text-green-700 focus:ring-green-500"
                   />
-                  {p.label}
+                  {p.product_name}
                 </label>
               ))}
             </div>
@@ -806,7 +856,9 @@ return ()=>clearTimeout(setval)
 
           {/* Grid */}
 
-          {allproducts?.length && <div>
+          {allproducts?.length 
+          ?
+          <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {allproducts?.map((product) => (
               <div
@@ -917,10 +969,9 @@ return ()=>clearTimeout(setval)
 
 
 
-          </div>}
-
-          {allproducts?.length === 0 && (
-            <div className="text-center py-12">
+          </div>
+        :
+        <div className="text-center py-12">
               <p className="text-gray-500 text-lg">
                 No products found matching your criteria.
               </p>
@@ -931,8 +982,9 @@ return ()=>clearTimeout(setval)
               >
                 Clear Filters
               </button>
-            </div>
-          )}
+            </div>  
+        
+        }
         </section>
       </div>
     </div>

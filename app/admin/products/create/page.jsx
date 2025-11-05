@@ -213,7 +213,7 @@ const CreateProduct = () => {
 
       if (response.data.success) {
         toast.success("Product created successfully!");
-        // router.push("/admin/products");
+        router.push("/admin/products");
       }
     } catch (error) {
       console.error("Create product error:", error);

@@ -26,6 +26,8 @@ function RelatedProducts() {
 const fetchProduct= async(filter="isFeatured")=>{
 try {
   setLoading(true)
+      setProducts([])
+
   const response = await axios.get(`${baseurl}/product/feature/?get=${filter}`);
   const data = await response.data;
   if(data.success){
