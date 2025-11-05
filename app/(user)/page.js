@@ -20,7 +20,7 @@ export default function Home() {
       {/* <RelatedProducts/> */}
       {/* <Reviews/> */}
 
-      {/* <BlogSection /> */}
+      <BlogSection />
     </div>
   );
 }
