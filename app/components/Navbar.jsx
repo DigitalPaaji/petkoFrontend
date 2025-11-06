@@ -14,7 +14,7 @@ import "aos/dist/aos.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getPet } from "./store/slices/petSlice";
 import axios from "axios";
-import { baseurl } from "../admin/components/apis";
+import { baseurl, imgurl } from "../admin/components/apis";
 
 export default function Navbar() {
 
@@ -297,8 +297,8 @@ return ()=>clearTimeout(setval)
               
               <input
                 type="search"
-                placeholder="Search Pet Accessories"
-                className="focus:outline-none"
+                placeholder="Search Pet Accessories "
+                className="focus:outline-none  w-full"
                  value={searchProduct}
                   onChange={(e) =>setSearchProduct(e.target.value) }
               />
@@ -312,8 +312,14 @@ return ()=>clearTimeout(setval)
   return(
     <Link key={index}
     onClick={()=>searchProduct(null)}
-      href={`/shop/${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50 ">
-    {item.name}
+      href={`/shop/${item.slug}`} className="text-sm capitalize border-b px-3 py-1 border-gray-600/50 flex gap-2 items-center ">
+
+
+                <img src={`${imgurl}/uploads/${item?.images[0]}`} alt="" className="h-10 w-10 rounded-full" />
+
+    <p>
+      {item.name.length >30 ? item.name.slice(0,30) :item.name}
+    </p>
     </Link>
 
 
@@ -331,9 +337,9 @@ return ()=>clearTimeout(setval)
 
               
               </div>
-              <button className="text-md text-white font-semibold bg-[#F48C7F] px-4 py-1.5 rounded-md">
+              {/* <button className="text-md text-white font-semibold bg-[#F48C7F] px-4 py-1.5 rounded-md">
                 Search
-              </button>
+              </button> */}
             </div>
 
             <div className="hidden xl:flex items-center gap-2">
@@ -530,8 +536,9 @@ return ()=>clearTimeout(setval)
   return(
     <Link key={index}
     onClick={()=>searchProduct(null)}
-      href={`/shop/${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50 ">
-    {item.name}
+      href={`/shop/${item.slug}`} className="capitalize border-b px-3 py-1 border-gray-600/50  flex items-center gap-2">
+                <img src={`${imgurl}/uploads/${item?.images[0]}`} alt="" className="h-10 w-10 rounded-full" />
+     <p> {item.name.length >30 ? item.name.slice(0,30) :item.name}</p>
     </Link>
 
 
