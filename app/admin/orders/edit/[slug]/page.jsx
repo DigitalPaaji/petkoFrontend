@@ -175,6 +175,33 @@ try {
   }
 
 
+const handelTracking=async()=>{
+ try {
+  
+if(formData.trackingId.length <3){
+  return;
+}
+
+const response = await axios.put(`${baseurl}/order/ordertracking`,{
+  orderid:slug
+  , trackingnumber:formData.trackingId
+})
+
+const data = await response.data;
+
+if(data.success){
+  toast.success(data.message)
+  fetchOrder()
+
+}else{
+    toast.error(data.message)
+}
+ } catch (error) {
+      toast.error(error.message)
+
+ }
+}
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -251,6 +278,7 @@ try {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Tracking Number
                   </label>
+                  <div className='flex gap-2'>
                   <input
                     type="text"
                     name="trackingId"
@@ -259,6 +287,8 @@ try {
                     placeholder="Enter tracking number"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
+                  <button onClick={handelTracking} className='bg-blue-600 text-white font-bold px-5 cursor-pointer rounded-md'>Add</button>
+                  </div>
                   <p className="text-sm text-gray-500 mt-1">
                     Leave empty if no tracking available
                   </p>
