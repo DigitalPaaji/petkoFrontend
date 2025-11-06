@@ -14,10 +14,12 @@ import {
   FaUser
 } from 'react-icons/fa'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 axios.defaults.withCredentials = true
 
 const Addressfield = ({setAddressId=null}) => {
+  const route = useRouter()
   const [showForm, setShowForm] = useState(false)
   const [addresses, setAddresses] = useState([])
   const [editingAddress, setEditingAddress] = useState(null)
@@ -41,8 +43,9 @@ data.data.forEach((item)=> {
 
       }
     } catch (error) {
-      console.error("Error fetching addresses:", error)
-      toast.error(`Failed to load addresses   . ${error}`)
+        route.push("/user/login")
+     
+      toast.error(`Please Login your Account`)
     } finally {
       setLoading(false)
     }
