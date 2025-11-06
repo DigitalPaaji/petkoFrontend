@@ -178,6 +178,23 @@ else{
   }
 }
 
+const handelDeleteOtherBanner= async(id)=>{
+  try {
+    const response = await axios.delete(`${baseurl}/banner/otherbanner/${id}`);
+    const data = await response.data;
+if(data.success){
+    toast.success(data.message)
+
+  getOtherBanner()
+}else{
+  toast.error(data.message)
+}
+
+  } catch (error) {
+      toast.error(error.message)
+
+  }
+}
 
 
 
@@ -322,6 +339,7 @@ onClick={()=>setOtherImage(!otherImage)}            className={`flex items-cente
             accept="image/png,image/jpeg,image/webp"
             onChange={handleFileChange}
             className="sr-only"
+            required
           />
         </div>
       </label>
@@ -363,6 +381,7 @@ onClick={()=>setOtherImage(!otherImage)}            className={`flex items-cente
         <select
           id="count"
           value={count}
+          required
           onChange={(e) => setCount(e.target.value)}
           className="w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-300"
         >
@@ -422,7 +441,7 @@ onClick={()=>setOtherImage(!otherImage)}            className={`flex items-cente
      <p className='absolute top-2 text-white left-2 bg-green-600 p-2 px-4 rounded-full z-40'>{item?.count}</p>
 
 <div className='  hidden  absolute h-full w-full bg-black/30 top-0 left-0 group-hover:flex justify-center items-center z-50 duration-150'>
-<MdDelete  className='text-red-500 font-bold text-4xl shadow cursor-pointer'/>
+<MdDelete  onClick={()=>handelDeleteOtherBanner(item._id)} className='text-red-500 font-bold text-4xl shadow cursor-pointer'/>
 </div>
       </div>
     )
