@@ -42,10 +42,10 @@ const fetchdata = async()=>{
 
 const fetchbanners= async()=>{
   try {
-    const response = await axios.get(`${baseurl}/banner/count`);
+    const response = await axios.get(`${baseurl}/banner/otherbanners`);
     const data = await response.data;
     if(data.success){
-      data.banners.forEach((item)=>{
+      data.data.forEach((item)=>{
         setImg((prev)=>({...prev,[`img${item.count}`]:item.image}))
       })
 

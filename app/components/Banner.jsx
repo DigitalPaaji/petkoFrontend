@@ -78,12 +78,12 @@ const fetchBanners2 = async()=>{
           <SwiperSlide key={index}>
             <div className="relative w-full h-full">
               <img
-                src={`${imgurl}/uploads/${banner.image}`}
+                src={`${imgurl}/uploads/${banner.imagemobile}`}
                 alt={banner.image || "Mobile Banner"}
                 className="block lg:hidden w-full h-full object-cover"
               />
               <img
-                src={`${imgurl}/uploads/${banner.image}`}
+                src={`${imgurl}/uploads/${banner.imagedesktop}`}
                 alt={banner.image || "Mobile Banner"}
                 className="hidden lg:block w-full h-full object-cover"
               />
