@@ -45,6 +45,11 @@ const Page = () => {
   // 🟦 Submit Both Files
   const handelSubmit = async () => {
     try {
+if(!desktopImage || !mobileImage){
+toast.error("Both size image are required")
+return 
+}
+
       const form = new FormData()
       if (desktopImage) form.append("desktop", desktopImage)
       if (mobileImage) form.append("mobile", mobileImage)
