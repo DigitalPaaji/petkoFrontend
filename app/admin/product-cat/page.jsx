@@ -19,7 +19,7 @@ const Page = () => {
         setProductCat(data.data);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+        toast.error(error.message)
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ const Page = () => {
        }
 
       } catch (error) {
-        console.error("Error deleting category:", error);
+        toast.error(error.message)
       }
     }
   };

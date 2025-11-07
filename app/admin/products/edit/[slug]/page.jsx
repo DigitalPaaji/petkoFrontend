@@ -105,7 +105,6 @@ const Page = ({ params: { slug } }) => {
         
       }
     } catch (error) {
-      console.error("Error fetching product:", error);
       toast.error("Failed to load product data");
     } finally {
       setLoading(false);
@@ -123,7 +122,6 @@ const Page = ({ params: { slug } }) => {
       if (catRes.data.success) setCategories(catRes.data.data);
       if (petRes.data.success) setPets(petRes.data.petCategory);
     } catch (error) {
-      console.error("Error fetching categories:", error);
       toast.error("Failed to load categories");
     }
   };
@@ -233,7 +231,7 @@ const Page = ({ params: { slug } }) => {
       
       }
     } catch (error) {
-      console.error("Update product error:", error);
+        toast.error(error.message)
       const errorMessage =
         error.response?.data?.error || "Failed to update product";
       toast.error(errorMessage);

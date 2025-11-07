@@ -86,7 +86,6 @@ const CreateProduct = () => {
       if (catRes.data.success) setCategories(catRes.data.data);
       if (petRes.data.success) setPets(petRes.data.petCategory);
     } catch (error) {
-      console.error("Error fetching data:", error);
       toast.error("Failed to load categories and pets");
     }
   };
@@ -216,7 +215,6 @@ const CreateProduct = () => {
         router.push("/admin/products");
       }
     } catch (error) {
-      console.error("Create product error:", error);
       const errorMessage = error.response?.data?.message || "Failed to create product";
       toast.error(errorMessage);
     } finally {

@@ -140,7 +140,6 @@ export default function AddressForm({
         toast.error(response.data.message || "Something went wrong");
       }
     } catch (error) {
-      console.error("Error saving address:", error);
       toast.error(
         error.response?.data?.message || "Failed to save address"
       );

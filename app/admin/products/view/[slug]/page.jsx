@@ -7,6 +7,7 @@ import { FiFileText } from "react-icons/fi";
 import { TfiPalette } from "react-icons/tfi";
 
 import Link from 'next/link'
+import { toast } from 'react-toastify'
 
 const Page = ({params: {slug}}) => {
   const [product, setProduct] = useState(null)
@@ -24,7 +25,7 @@ const Page = ({params: {slug}}) => {
         setColorSection(data.data.colors || [])
       }
     } catch (error) {
-      console.error("Error fetching product:", error)
+        toast.error(error.message)
     } finally {
       setLoading(false)
     }

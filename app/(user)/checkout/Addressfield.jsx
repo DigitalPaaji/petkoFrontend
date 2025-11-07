@@ -62,7 +62,6 @@ data.data.forEach((item)=> {
         fetchAddresses()
       }
     } catch (error) {
-      console.error("Error deleting address:", error)
       toast.error("Failed to delete address")
     }
   }
@@ -76,7 +75,6 @@ data.data.forEach((item)=> {
         fetchAddresses()
       }
     } catch (error) {
-      console.error("Error setting default address:", error)
       toast.error("Failed to set default address")
     }
   }

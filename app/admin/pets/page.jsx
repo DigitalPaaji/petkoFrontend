@@ -24,7 +24,7 @@ const Page = () => {
       setError(null);
     } catch (err) {
       setError(err.message);
-      console.error("Error fetching pet cats:", err);
+        toast.error(error.message)
     } finally {
       setLoading(false);
     }

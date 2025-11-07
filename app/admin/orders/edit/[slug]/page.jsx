@@ -103,7 +103,6 @@ const OrderEditPage = ({params: {slug}}) => {
         router.push('/admin/orders')
       }
     } catch (error) {
-      console.error('Error updating order:', error)
       alert('Error updating order. Please try again.')
     } finally {
       setSaving(false)

@@ -10,6 +10,7 @@ import {
   Heart,
 } from "lucide-react";
 import { FaHeart } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 // Static product data
 const staticProducts = [
@@ -129,7 +130,7 @@ const setLocalStorage = (key, value) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
-    console.error('Error saving to localStorage:', error);
+        toast.error(error.message)
   }
 };
 

@@ -21,6 +21,7 @@ import {
   FaTimes,
   FaExternalLinkAlt
 } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 
 const Page = () => {
   const [layouts, setLayouts] = useState([])
@@ -35,7 +36,7 @@ const Page = () => {
         setLayouts(data.data)
       }
     } catch (error) {
-      console.error('Error fetching layouts:', error)
+        toast.error(error.message)
     } finally {
       setLoading(false)
     }
@@ -54,7 +55,7 @@ const Page = () => {
           fetchLayouts() // Refresh the list
         }
       } catch (error) {
-        console.error('Error deleting layout:', error)
+        toast.error(error.message)
       }
     }
   }
@@ -71,7 +72,7 @@ if(bool==true){
         fetchLayouts() // Refresh the list
       }
     } catch (error) {
-      console.error('Error updating layout:', error)
+        toast.error(error.message)
     }
   }
 

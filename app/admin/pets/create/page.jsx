@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { baseurl } from '../../components/apis';
+import { toast } from 'react-toastify';
 // import { baseurl, imgurl } from '../components/apis';
 
 
@@ -80,7 +81,7 @@ const Page = () => {
         document.getElementById('image-upload').value = '';
       }
     } catch (error) {
-      console.error('Error creating pet category:', error);
+        toast.error(error.message)
       setMessage({ type: 'error', text: 'Failed to create pet category. Please try again.' });
     } finally {
       setLoading(false);

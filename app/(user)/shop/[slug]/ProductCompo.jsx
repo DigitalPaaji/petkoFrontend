@@ -68,6 +68,7 @@ console.log("sdfsdf",relatedPro);
         {
           productId: id,
           price,
+          quantity
         },
         {
           withCredentials: true,
@@ -85,6 +86,8 @@ console.log("sdfsdf",relatedPro);
       router.push("/user/login");
     }
   };
+
+
 
   const handelWishlistadd = async (id) => {
     try {

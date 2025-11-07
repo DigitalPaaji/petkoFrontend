@@ -6,6 +6,7 @@ import { FiArrowRight, FiCalendar, FiClock, FiEye, FiUser } from "react-icons/fi
 import { baseurl, imgurl } from "@/app/admin/components/apis";
 import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const News = () => {
   const [blogs, setBlogs] = useState([]);
@@ -18,7 +19,7 @@ const News = () => {
           setBlogs(response.data.blogs);
         }
       } catch (error) {
-        console.error("Error fetching blogs:", error);
+        toast.error(error.message)
       }
     };
 

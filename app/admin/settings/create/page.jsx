@@ -119,7 +119,6 @@ const Page = () => {
         toast.error(data.message)
       }
     } catch (error) {
-      console.error('Submission error:', error)
       toast.error('Failed to submit form. Please try again.')
     }
   }

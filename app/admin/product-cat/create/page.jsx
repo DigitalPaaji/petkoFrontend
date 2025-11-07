@@ -34,7 +34,6 @@ const Page = () => {
       }
     } catch (err) {
       setError(err.message);
-      console.error("Error fetching pet cats:", err);
     } finally {
       setLoading(false);
     }
@@ -105,7 +104,6 @@ const Page = () => {
         document.getElementById('file-upload').value = '';
       }
     } catch (error) {
-      console.error('Error creating product category:', error);
       setMessage({ type: 'error', text: error.response?.data?.error || 'Failed to create product category' });
     } finally {
       setSubmitLoading(false);

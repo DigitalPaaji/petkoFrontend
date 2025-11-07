@@ -18,7 +18,6 @@ const Page = () => {
         setProducts(data.products || []);
       }
     } catch (error) {
-      console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
@@ -35,7 +34,6 @@ const Page = () => {
         toast.success("Product deleted successfully!");
         fetchData(); // Refresh the data
       } catch (error) {
-        console.error("Error deleting product:", error);
         toast.error("Failed to delete product");
       }
     }

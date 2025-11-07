@@ -18,6 +18,7 @@ import {
 // import html2canvas from 'html2canvas'
 // import jsPDF from 'jspdf'
 import Link from 'next/link'
+import { toast } from 'react-toastify'
 
 const OrderDetailPage = ({params: {slug}}) => {
   const [order, setOrder] = useState(null)
@@ -33,7 +34,7 @@ const OrderDetailPage = ({params: {slug}}) => {
         setOrder(data.data)
       }
     } catch (error) {
-      console.error('Error fetching order:', error)
+        toast.error(error.message)
     } finally {
       setLoading(false)
     }
