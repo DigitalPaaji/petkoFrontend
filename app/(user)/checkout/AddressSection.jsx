@@ -25,6 +25,49 @@ export default function AddressForm({
   const [loading, setLoading] = useState(false);
   const [isDefault, setIsDefault] = useState(addressData?.default || false);
 
+  // Validation functions
+ const validateNoScript = (value) => {
+  if (!value) return true;
+  
+  // Strict validation - only allow letters, numbers, spaces, and basic punctuation
+  const safePattern = /^[a-zA-Z0-9\s\-\.,'#&@!?()/:+]*$/;
+  
+  // Also check for any HTML tags as additional security
+  const htmlTagPattern = /<[^>]*>/gi;
+  
+  if (htmlTagPattern.test(value)) {
+    return "HTML tags are not allowed";
+  }
+  
+  if (!safePattern.test(value)) {
+    return "Special characters are not allowed in this field";
+  }
+  
+  return true;
+};
+
+  const validateName = (value) => {
+    if (!value) return "This field is required";
+    
+    // Only allow letters, spaces, hyphens, and apostrophes
+    const namePattern = /^[a-zA-Z\s\-']+$/;
+    if (!namePattern.test(value)) {
+      return "Name can only contain letters, spaces, hyphens, and apostrophes";
+    }
+    
+    return validateNoScript(value) || true;
+  };
+
+  const validateText = (value) => {
+    if (!value) return true;
+    return validateNoScript(value);
+  };
+
+  const validateRequiredText = (value) => {
+    if (!value) return "This field is required";
+    return validateNoScript(value);
+  };
+
   const {
     register,
     handleSubmit,
@@ -59,19 +102,30 @@ export default function AddressForm({
   const onSubmit = async (data) => {
     setLoading(true);
     try {
+      // Additional client-side sanitization
+      const sanitizedData = Object.keys(data).reduce((acc, key) => {
+        if (typeof data[key] === 'string') {
+          // Remove any potential script tags and dangerous attributes
+          acc[key] = data[key]
+            .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            .replace(/javascript:/gi, '')
+            .replace(/onclick|onload|onerror|onmouse|onkey/gi, '');
+        } else {
+          acc[key] = data[key];
+        }
+        return acc;
+      }, {});
+
       const formData = {
-        ...data,
+        ...sanitizedData,
         default: isDefault
       };
 
       let response;
       if (mode === "edit" && addressData?._id) {
-        response = await axios.put(`${baseurl}/address/update/${addressData._id}`,formData);
+        response = await axios.put(`${baseurl}/address/update/${addressData._id}`, formData);
       } else {
-        response = await axios.post(
-          `${baseurl}/address/create`,
-          formData
-        );
+        response = await axios.post(`${baseurl}/address/create`, formData);
       }
 
       if (response.data.success) {
@@ -96,13 +150,7 @@ export default function AddressForm({
   };
 
   return (
-<>
-
-
-
-
- {
-    <div className=" mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="mx-auto p-6 bg-white rounded-lg shadow-md">
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -137,7 +185,8 @@ export default function AddressForm({
                   maxLength: {
                     value: 50,
                     message: "First name cannot exceed 50 characters"
-                  }
+                  },
+                  validate: validateName
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.firstName ? "border-red-300" : "border-gray-300"
@@ -167,7 +216,8 @@ export default function AddressForm({
                   maxLength: {
                     value: 50,
                     message: "Last name cannot exceed 50 characters"
-                  }
+                  },
+                  validate: validateName
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.lastName ? "border-red-300" : "border-gray-300"
@@ -198,7 +248,8 @@ export default function AddressForm({
                 maxLength: {
                   value: 200,
                   message: "Address line 1 cannot exceed 200 characters"
-                }
+                },
+                validate: validateRequiredText
               })}
               className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                 errors.addressLine1 ? "border-red-300" : "border-gray-300"
@@ -227,7 +278,8 @@ export default function AddressForm({
                 maxLength: {
                   value: 200,
                   message: "Address line 2 cannot exceed 200 characters"
-                }
+                },
+                validate: validateText
               })}
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Apartment, suite, unit, building, floor, etc."
@@ -257,7 +309,8 @@ export default function AddressForm({
                   maxLength: {
                     value: 100,
                     message: "City cannot exceed 100 characters"
-                  }
+                  },
+                  validate: validateRequiredText
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.city ? "border-red-300" : "border-gray-300"
@@ -287,7 +340,8 @@ export default function AddressForm({
                   maxLength: {
                     value: 100,
                     message: "State cannot exceed 100 characters"
-                  }
+                  },
+                  validate: validateRequiredText
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.state ? "border-red-300" : "border-gray-300"
@@ -317,7 +371,12 @@ export default function AddressForm({
                   maxLength: {
                     value: 20,
                     message: "Postal code cannot exceed 20 characters"
-                  }
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Postal code must contain only numbers"
+                  },
+                  validate: validateText
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.postalCode ? "border-red-300" : "border-gray-300"
@@ -350,7 +409,8 @@ export default function AddressForm({
                   maxLength: {
                     value: 100,
                     message: "Country cannot exceed 100 characters"
-                  }
+                  },
+                  validate: validateRequiredText
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.country ? "border-red-300" : "border-gray-300"
@@ -379,7 +439,8 @@ export default function AddressForm({
                   pattern: {
                     value: /^\+?[\d\s\-\(\)]{10,}$/,
                     message: "Please provide a valid phone number"
-                  }
+                  },
+                  validate: validateText
                 })}
                 className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.phone ? "border-red-300" : "border-gray-300"
@@ -411,8 +472,6 @@ export default function AddressForm({
         <div className="flex gap-3 pt-4">
           <button
             type="submit"
-
-
             disabled={loading}
             className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition duration-300"
           >
@@ -438,9 +497,5 @@ export default function AddressForm({
         </div>
       </form>
     </div>
-
-        }
-
-</>
   );
 }
